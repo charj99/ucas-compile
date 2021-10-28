@@ -1,0 +1,39 @@
+version: "3.4"
+
+services:
+  llvm:
+    image: lczxxx123/llvm_10_hw:0.2
+    container_name: compile-course
+# 容器启动模式：always　总是重新启动；no-failure　报错退出时重启；unless-stopped　自启模式
+    restart: unless-stopped
+# 挂载工作目录
+    volumes:
+      - ./assignment1:/home/deploy/assignment1/
+      - ./assignment2:/home/deploy/assignment2/
+      - ./assignment3:/home/deploy/assignment3/
+#  hostname: "projects"
+# 如果在Dockerfile中修改过用户名，此处也要对应修改用户名和工作目录
+# user: deploy
+#    working_dir: /home/deploy/projects
+# 修改安全配置，以运行gdb server
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
+# 开启 ssh 服务，这样 clion 就能通过 ssh 连接进来了
+# 同时通过 tailf 命令保持 container 不要退出的状态  
+    command:
+# 添加用户并配置密码
+# 赋予sudo权限并允许无密码sudo
+      - sh
+      - -c
+      - |
+        useradd -d /home/deploy -m deploy && yes deploy | passwd deploy
+        # echo deploy 'ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+        # chmod 644 /etc/sudoers
+        chmod -R 777 /home/deploy
+        apt-get update && apt-get -y install openssh-server rsync gdb
+        service ssh restart && tail -f /dev/null
+# 此处将容器的22端口映射到主机的2222上，且仅对本机开放
+    ports:
+      - "127.0.0.1:2222:22"
