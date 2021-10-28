@@ -3,6 +3,7 @@ project(assign2)
 # add by xjj [begin]
 set(LLVM_DIR "/usr/local/llvm10ra")
 set(Clang_DIR "/usr/local/llvm10ra/lib/cmake/clang")
+add_compile_options(-std=c++14)
 #add by xjj [end]
 find_package(LLVM REQUIRED CONFIG HINTS ${LLVM_DIR} ${LLVM_DIR}/lib/cmake/llvm
 	                NO_DEFAULT_PATH)

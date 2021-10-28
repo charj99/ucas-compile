@@ -7,3 +7,6 @@ assignment1/src/.clion.source.upload.marker
 assignment2/src/.idea
 assignment2/src/cmake-build-debug
 assignment2/src/.clion.source.upload.marker
+assignment2/test/*.bc
+assignment2/test/*.ll
+
