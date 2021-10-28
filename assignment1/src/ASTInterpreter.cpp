@@ -20,24 +20,28 @@ public:
    virtual ~InterpreterVisitor() {}
 
    virtual void VisitBinaryOperator (BinaryOperator * bop) {
+       if (mEnv->isReturned()) return;
        Diag << "solving binary operator expr\n";
 	   VisitStmt(bop);
        mEnv->binop(bop);
        Diag << "finished solving binary operator expr\n";
    }
    virtual void VisitDeclRefExpr(DeclRefExpr * expr) {
+       if (mEnv->isReturned()) return;
        Diag << "solving decl ref expr\n";
 	   VisitStmt(expr);
 	   mEnv->declref(expr);
        Diag << "finished solving decl ref expr\n";
    }
    virtual void VisitCastExpr(CastExpr * expr) {
+       if (mEnv->isReturned()) return;
        Diag << "solving cast expr\n";
 	   VisitStmt(expr);
 	   mEnv->cast(expr);
        Diag << "finished solving cast expr\n";
    }
    virtual void VisitCallExpr(CallExpr * call) {
+       if (mEnv->isReturned()) return;
        Diag << "solving call expr\n";
 	   VisitStmt(call);
 	   mEnv->call(call);
@@ -45,11 +49,13 @@ public:
        FunctionDecl* callee = call->getDirectCallee();
        if (callee->hasBody()) { 
            VisitStmt(callee->getBody());
+            mEnv->popStack();
        }
        Diag << "finished solving call expr\n";
    }
 
    virtual void VisitDeclStmt(DeclStmt * declstmt) {
+       if (mEnv->isReturned()) return;
        Diag << "solving decl stmt\n";
 	   mEnv->decl(declstmt);
        Diag << "finished solving decl stmt\n";
@@ -62,6 +68,7 @@ public:
    }
 
    virtual void VisitIfStmt(IfStmt* ifstmt) {
+        if (mEnv->isReturned()) return;
         Diag << "solving if stmt\n";
 
         Stmt* cond = wrapStmt(ifstmt->getCond());
@@ -85,6 +92,7 @@ public:
    }
 
    virtual void VisitReturnStmt(ReturnStmt* retstmt) {
+       if (mEnv->isReturned()) return;
         Diag << "solving return stmt\n";
         VisitStmt(retstmt);
         mEnv->mreturn(retstmt);
@@ -92,6 +100,7 @@ public:
    }
    
    virtual void VisitUnaryOperator (UnaryOperator * uop) {
+       if (mEnv->isReturned()) return;
        Diag << "solving unary operator expr\n";
 	   VisitStmt(uop);
        mEnv->uniop(uop);
@@ -99,6 +108,7 @@ public:
    }
 
    virtual void VisitWhileStmt(WhileStmt* wstmt) {
+       if (mEnv->isReturned()) return;
        Diag << "solving while stmt\n";
     
        Stmt* cond = wrapStmt(wstmt->getCond());
@@ -115,6 +125,7 @@ public:
    }
 
    virtual void VisitForStmt(ForStmt* forstmt) {
+       if (mEnv->isReturned()) return;
        Diag << "solving for stmt\n";
        Stmt* init = forstmt->getInit();
        if (init) VisitStmt(wrapStmt(init));
@@ -134,6 +145,7 @@ public:
    }
 
    virtual void VisitArraySubscriptExpr(ArraySubscriptExpr* arrExpr) {
+       if (mEnv->isReturned()) return;
        Diag << "solving array subscript expr\n";
        Expr* index = arrExpr->getIdx();
        VisitStmt(wrapStmt(index));
@@ -141,6 +153,7 @@ public:
    }
 
    virtual void VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr* expr) {
+       if (mEnv->isReturned()) return;
        Diag << "solving unary expr or type trait expr\n";
        assert(expr->getKind() == UETT_SizeOf && expr->isArgumentType());
        mEnv->msizeof(expr);
@@ -148,6 +161,7 @@ public:
    }
 
    virtual void VisitParenExpr(ParenExpr* expr) {
+       if (mEnv->isReturned()) return;
        Diag << "solving paren expr\n";
        VisitStmt(expr);
        mEnv->paren(expr);

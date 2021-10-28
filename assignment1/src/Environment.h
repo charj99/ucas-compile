@@ -26,8 +26,9 @@ class StackFrame {
    std::map<std::pair<Decl*, int>, LL> mArrs;
    /// The current stmt
    Stmt * mPC;
+   bool returned;
 public:
-   StackFrame() : mVars(), mExprs(), mPC(NULL), mArrs() {
+   StackFrame() : mVars(), mExprs(), mPC(NULL), mArrs(), returned(false) {
    }
 
    void bindDecl(Decl* decl, LL val) {
@@ -95,6 +96,14 @@ public:
                 << "[" << arr.first.second << "] = " 
                 << arr.second << "\n\n";
        }
+   }
+
+   void setReturned() {
+        returned = true;
+   }
+
+   bool isReturned() {
+        return returned;
    }
 };
 
@@ -169,7 +178,19 @@ public:
    /// Get the declartions to the built-in functions
    Environment() : mStack(), mFree(NULL), mMalloc(NULL), mInput(NULL), mOutput(NULL), mEntry(NULL), mHeap() {
    }
-    
+   
+   bool isReturned() {
+       return mStack.back().isReturned();
+   }
+
+   void setReturned() {
+        mStack.back().setReturned();
+   }
+
+   void popStack() {
+        mStack.pop_back();
+   }
+
    void initVars(VarDecl* vardecl) {
        IntegerLiteral* IL;
        if (vardecl->hasInit() && (IL = dyn_cast<IntegerLiteral>(vardecl->getInit()))) {
@@ -435,6 +456,7 @@ public:
                 sf.bindDecl(param, val);
             }
             mStack.push_back(sf);
+            // dumpStack();
        }
    }
 
@@ -445,14 +467,23 @@ public:
    }
 
    void mreturn(ReturnStmt* retstmt) {
-	   mStack.back().setPC(retstmt);
+	   // mStack.back().setPC(retstmt);
        Expr* retValue = retstmt->getRetValue();
        LL val = getExactVal(retValue);
+       /*
        mStack.pop_back();
        if (!mStack.back().getPC()) return;
        CallExpr* callexpr = dyn_cast<CallExpr>(mStack.back().getPC());
        assert(callexpr);
        mStack.back().bindStmt(callexpr, val);
+       */
+        int idx = mStack.size() - 2;
+       if (idx < 0 || !mStack[idx].getPC()) return;
+       CallExpr* callexpr = dyn_cast<CallExpr>(mStack[idx].getPC());
+       assert(callexpr);
+       mStack[idx].bindStmt(callexpr, val);
+        
+       setReturned();
    }
 
    void uniop(UnaryOperator* uop) {
