@@ -1,0 +1,25 @@
+#1.docker获取
+`与改作业用的docker环境一致`
+
+阿里云：docker pull registry.cn-hangzhou.aliyuncs.com/test_tc/llvm_hw:0.2
+	digest: sha256:41414d30fd04220768b641e426c14971d1d78e9252aeb6297118dae1f2d01c50 size: 1574
+
+dockerhub：docker pull lczxxx123/llvm_10_hw:0.2
+	digest: sha256:41414d30fd04220768b641e426c14971d1d78e9252aeb6297118dae1f2d01c50 size: 1574
+
+
+#2.第一次作业参考命令（主要是第三点-DLLVM_DIR=/usr/local/llvm10ra/）：
+a.创建容器并从容器退出(以阿里云为例)
+docker run -itd llvm_hw:0.2 /bin/bash
+
+b.拷代码/makefile，testcase
+docker cp ${your code & CMakefile Folder} ${containerId}:/root/
+docker cp ${testcases} ${containerId}:/root/
+
+c.make，注意加上-DLLVM_DIR=/usr/local/llvm10ra/
+docker exec ${containerId} mkdir ${tempBuildFolder}
+docker exec -w ${tempBuildFolder} ${containerId}  cmake -DLLVM_DIR=/usr/local/llvm10ra/ ${your code & CMakefile Folder}
+docker exec -w ${tempBuildFolder} ${containerId} make
+
+d.进入容器，ast-interpreter应该在${tempBuildFolder}底下
+docker exec -it ${containerId} /bin/bash
