@@ -1,5 +1,6 @@
 clang+llvm-10.0.0/
 clang+llvm-12.0.1/
 assignment1/.idea
+assignment1/src/.idea
 assignment1/src/cmake-build-debug
 assignment1/src/.clion.source.upload.marker
