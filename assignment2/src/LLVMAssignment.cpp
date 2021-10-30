@@ -66,7 +66,7 @@ typedef map<FVPair, FuncSet> PVVals;
 typedef map<CallInst*, FuncSet> CallGraph;
 
 typedef set<StringRef> StrSet;
-typedef map<int, StrSet, greater<int> > SortedLineFuncsMap;
+typedef map<int, StrSet, less<int> > SortedLineFuncsMap;
 
 typedef struct GlobalInfo_s {
     PVVals pvVals;
@@ -76,15 +76,16 @@ typedef struct GlobalInfo_s {
 
 #define FOREACH(Type, item, it) \
     for (Type::iterator it = item.begin(), it##e = item.end(); it##e != it; ++it)
-#define INSERT2SETMAP(MapType, item, key, SetType, value) \
+#define INSERT2SETMAP(MapType, item, key, SetType, value, changed) \
     do {                                   \
         MapType::iterator it = item.find(key);\
-        if (it != item.end())                 \
-            it->second.insert(value);                \
+        if (it != item.end()) \
+            changed |= it->second.insert(value).second;                \
         else {                                            \
             SetType tmpSet = SetType();                  \
             tmpSet.insert(value);\
-            item[key] = tmpSet;\
+            item[key] = tmpSet;                                    \
+            changed = true;                                                          \
         }                                 \
     } while (0)
 #define CONTAINS(item, target) \
@@ -123,18 +124,23 @@ struct FuncPtrPass : public ModulePass {
   void collectDirectCalls(Module &M);
   void collectPVVals(Module& M);
   void collectPVBinds(Module& M);
-  bool propagateBindings();
+  bool propagateBindings(Module& M);
   bool mergeBinds(FVPair u, FVPair v);
   bool haveSamePVBinds(FVSet& uFV, FVSet& vFV);
-  void buildCallGraph(Module& M);
-  bool isFuncPtrType(Value* value);
+  bool buildCallGraph(Module& M);
+  bool isFuncPtr(Value* value);
+  bool isDirectCall(CallInst* CI);
+  bool addBinds4Params(Function* F, CallInst* CI);
 
   void dumpCallGraph();
   void dumpPVVals();
   void dumpPVBinds();
 };
 
-// TODO:
+bool FuncPtrPass::isDirectCall(CallInst* CI) {
+    return !CI->isIndirectCall() && !CI->getCalledFunction()->isIntrinsic();
+}
+
 void FuncPtrPass::collectDirectCalls(Module& M) {
     CallGraph& callGraph = globalInfo.callGraph;
     FOREACH(Module, M, f) {
@@ -142,10 +148,11 @@ void FuncPtrPass::collectDirectCalls(Module& M) {
         for (inst_iterator i = inst_begin(F), ie = inst_end(F); i != ie; ++i) {
             Instruction* I = &*i;
             if (CallInst* CI = dyn_cast<CallInst>(I)) {
-                if (CI->isIndirectCall()) continue;
-                Function* callee = CI->getCalledFunction();
-                if (callee->isIntrinsic()) continue;
-                INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet, callee);
+                if (isDirectCall(CI)) {
+                    bool tmpChanged = false;
+                    INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet,
+                                  CI->getCalledFunction(), tmpChanged);
+                }
             }
         }
     }
@@ -157,23 +164,27 @@ void FuncPtrPass::collectPVVals(Module& M) {
         Function* F = &*f;
         for (inst_iterator i = inst_begin(F), ie = inst_end(F); i != ie; ++i) {
             Instruction* I = &*i;
+
+            // solve phi node
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
                 for (int j = 0; j < n; j++) {
                     Value* value = phi->getIncomingValue(j);
-                    if (Function* funcPtr = dyn_cast<Function>(value))
-                        INSERT2SETMAP(PVVals, pvVals, FVPair(F, phi), FuncSet, funcPtr);
+                    if (Function* funcPtr = dyn_cast<Function>(value)) {
+                        bool tmpChanged = false;
+                        INSERT2SETMAP(PVVals, pvVals, FVPair(F, phi), FuncSet, funcPtr, tmpChanged);
+                    }
                 }
             }
         }
     }
 }
 
-bool FuncPtrPass::isFuncPtrType(Value* value) {
+bool FuncPtrPass::isFuncPtr(Value* value) {
     PointerType* PT = dyn_cast<PointerType>(value->getType());
     if (!PT) return false;
     FunctionType* FT = dyn_cast<FunctionType>(PT->getElementType());
-    return FT != NULL;
+    return FT != NULL && !isa<Function>(value) && !isa<ConstantPointerNull>(value);
 }
 
 void FuncPtrPass::collectPVBinds(Module& M) {
@@ -182,12 +193,15 @@ void FuncPtrPass::collectPVBinds(Module& M) {
         Function* F = &*f;
         for (inst_iterator i = inst_begin(F), ie = inst_end(F); i != ie; ++i) {
             Instruction* I = &*i;
+
+            // solve phi node
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
                 for (int j = 0; j < n; j++) {
                     Value* value = phi->getIncomingValue(j);
-                    if (isFuncPtrType(value) && !isa<Function>(value)) {
-                        INSERT2SETMAP(PVBinds, pvBinds, FVPair(F, phi), FVSet, FVPair(F, value));
+                    if (isFuncPtr(value)) {
+                        bool tmpChanged = false;
+                        INSERT2SETMAP(PVBinds, pvBinds, FVPair(F, phi), FVSet, FVPair(F, value), tmpChanged);
                     }
                 }
             }
@@ -195,11 +209,48 @@ void FuncPtrPass::collectPVBinds(Module& M) {
     }
 }
 
-void FuncPtrPass::buildCallGraph(Module& M) {
-    FVSet visited;
+bool FuncPtrPass::addBinds4Params(Function* F, CallInst* CI) {
+    CallGraph& callGraph = globalInfo.callGraph;
+    PVBinds& pvBinds = globalInfo.pvBinds;
+    PVVals& pvVals = globalInfo.pvVals;
+    bool changed = false;
+
+    int n = CI->getNumArgOperands();
+    for (int j = 0; j < n; j++) {
+        Value* value = CI->getArgOperand(j);
+
+        // update PVVals
+        if (Function* f = dyn_cast<Function>(value)) {
+            Diag << "update pvVals\n";
+            FuncSet& FS = callGraph[CI];
+            FOREACH(FuncSet, FS, k) {
+                Function* callee = *k;
+                FVPair u = FVPair(callee, callee->getArg(j));
+                INSERT2SETMAP(PVVals, pvVals, u, FuncSet, f, changed);
+            }
+        }
+
+        // update PVBinds
+        else if (isFuncPtr(value)) {
+            Diag << "update pvBinds\n";
+            FVPair v = FVPair(F, value);
+            FuncSet& FS = callGraph[CI];
+            FOREACH(FuncSet, FS, k) {
+                Function* callee = *k;
+                FVPair u = FVPair(callee, callee->getArg(j));
+                INSERT2SETMAP(PVBinds, pvBinds, u, FVSet, v, changed);
+            }
+        }
+    }
+    return changed;
+}
+
+bool FuncPtrPass::buildCallGraph(Module& M) {
+    // FVSet visited;
     PVBinds& pvBinds = globalInfo.pvBinds;
     PVVals& pvVals = globalInfo.pvVals;
     CallGraph& callGraph = globalInfo.callGraph;
+    bool changed = false;
     FOREACH(Module, M, f) {
         Function* F = &*f;
         for (inst_iterator i = inst_begin(F), ie = inst_end(F); i != ie; ++i) {
@@ -207,14 +258,18 @@ void FuncPtrPass::buildCallGraph(Module& M) {
             if (CallInst* CI = dyn_cast<CallInst>(I)) {
                 Value* value = CI->getCalledValue();
                 FVPair fvPair = FVPair(F, value);
+                /*
                 if(CONTAINS(visited, fvPair)) continue;
                 visited.insert(fvPair);
+                 */
 
                 // get values
                 if (CONTAINS(pvVals, fvPair)) {
                     FuncSet& FS = pvVals[fvPair];
-                    FOREACH(FuncSet, FS, k)
-                        INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet, *k);
+                    FOREACH(FuncSet, FS, k) {
+                        bool tmpChanged = false;
+                        INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet, *k, tmpChanged);
+                    }
                 }
 
                 // get bindings
@@ -226,15 +281,20 @@ void FuncPtrPass::buildCallGraph(Module& M) {
 
                         // get value of each binding
                         FuncSet &FS = pvVals[ptr];
-                        FOREACH(FuncSet, FS, k)
-                            INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet, *k);
+                        FOREACH(FuncSet, FS, k) {
+                            bool tmpChanged = false;
+                            INSERT2SETMAP(CallGraph, callGraph, CI, FuncSet, *k, tmpChanged);
+                        }
                     }
                 }
+
+                // add bindings for function parameters
+                changed |= addBinds4Params(F, CI);
             }
         }
     }
+    return changed;
 }
-
 
 bool FuncPtrPass::haveSamePVBinds(FVSet& uFV, FVSet& vFV) {
     // have the same size
@@ -243,6 +303,8 @@ bool FuncPtrPass::haveSamePVBinds(FVSet& uFV, FVSet& vFV) {
     // TODO: add sort function?
     for (FVSet::iterator i = uFV.begin(), j = vFV.begin(), ie = uFV.end();
         i != ie; ++i, ++j) {
+        Diag << i->f << " " << j->f;
+        Diag << ", " << i->v << " " << j->v << "\n";
         if (*i != *j) return false;
     }
     return true;
@@ -250,6 +312,11 @@ bool FuncPtrPass::haveSamePVBinds(FVSet& uFV, FVSet& vFV) {
 
 bool FuncPtrPass::mergeBinds(FVPair u, FVPair v) {
     PVBinds& pvBinds = globalInfo.pvBinds;
+    if (isa<ConstantPointerNull>(v.v)) {
+        errs() << "here\n";
+        return false;
+    }
+
     FVSet uFV;
     if (CONTAINS(pvBinds, u))
         uFV = pvBinds[u];
@@ -258,7 +325,7 @@ bool FuncPtrPass::mergeBinds(FVPair u, FVPair v) {
     FVSet vFV;
     if (CONTAINS(pvBinds, v))
         vFV = pvBinds[v];
-    else vFV = FVSet();
+    else return false; // nothing to bind
 
     if (haveSamePVBinds(uFV, vFV)) return false;
 
@@ -267,7 +334,7 @@ bool FuncPtrPass::mergeBinds(FVPair u, FVPair v) {
     return true;
 }
 
-bool FuncPtrPass::propagateBindings() {
+bool FuncPtrPass::propagateBindings(Module& M) {
     bool changed = false;
     PVBinds& pvBinds = globalInfo.pvBinds;
     FOREACH(PVBinds, pvBinds, i) {
@@ -275,11 +342,14 @@ bool FuncPtrPass::propagateBindings() {
         FVSet& fvSet = i->second;
         FOREACH(FVSet, fvSet, j) {
             FVPair v = *j;
-            Diag << "mergeBinds begin\n";
             changed |= mergeBinds(u, v);
-            Diag << "mergeBinds end\n";
         }
     }
+    changed |= buildCallGraph(M);
+    Diag << "***************************************\n";
+    Diag << "PVBinds\n";
+    Diag << "***************************************\n";
+    if (DEBUG) dumpPVBinds();
     return changed;
 }
 
@@ -305,9 +375,8 @@ bool FuncPtrPass::runOnModule(Module &M) {
     if (DEBUG) dumpPVBinds();
 
     Diag << "propagate\n";
-    while (propagateBindings());
+    while (propagateBindings(M));
 
-    buildCallGraph(M);
     Diag << "***************************************\n";
     Diag << "Call graph\n";
     Diag << "***************************************\n";
