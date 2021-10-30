@@ -33,7 +33,7 @@
 #include <llvm/IR/Instructions.h>
 #include <llvm/IR/InstIterator.h>
 
-#define DEBUG 1
+#define DEBUG 0
 #define Diag if (DEBUG) errs()
 
 using namespace llvm;
@@ -463,7 +463,7 @@ void FuncPtrPass::dumpCallGraph() {
     }
 
     FOREACH(SortedLineFuncsMap, result, i) {
-        errs() << i->first << ": ";
+        errs() << i->first << " : ";
         StrSet strSet = i->second;
         StrSet::iterator j = strSet.begin(), je = strSet.end();
         errs() << *j;
