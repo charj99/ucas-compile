@@ -5,12 +5,12 @@ LL = $(patsubst %.c, %.ll, $(SRC))
 bc: $(BC)
 
 %.bc: %.c
-	clang -emit-llvm -c -g $< -o $@
+	clang -emit-llvm -c -g3 -O0 $< -o $@
 
 ll: $(LL)
 
 %.ll: %.c
-	clang -emit-llvm -S -g $< -o $@
+	clang -emit-llvm -S -g3 -O0 $< -o $@
 
 
 .PONHY: clean echo ll bc

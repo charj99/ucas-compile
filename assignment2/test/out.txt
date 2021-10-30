@@ -1,0 +1,28 @@
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 !dbg !7 {
+entry:
+  call void @llvm.dbg.value(metadata i32 %a, metadata !11, metadata !DIExpression()), !dbg !12
+  call void @llvm.dbg.value(metadata i32 %b, metadata !13, metadata !DIExpression()), !dbg !12
+  %add = add nsw i32 %a, %b, !dbg !14
+  ret i32 %add, !dbg !15
+}
+
+no Intrinsic
+; Function Attrs: nounwind readnone speculatable willreturn
+declare void @llvm.dbg.value(metadata %0, metadata %1, metadata %2) #1
+
