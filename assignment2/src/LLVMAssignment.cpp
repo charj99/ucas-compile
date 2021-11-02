@@ -175,6 +175,7 @@ void FuncPtrPass::collectIntraPVValsAndRets(Module& M) {
             Instruction* I = &*i;
 
             // solve phi node
+            // TODO: debug here
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
                 for (int j = 0; j < n; j++) {
@@ -215,6 +216,7 @@ void FuncPtrPass::collectIntraPVBinds(Module& M) {
             Instruction* I = &*i;
 
             // solve phi node
+            // TODO: debug here
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
                 for (int j = 0; j < n; j++) {
@@ -452,14 +454,14 @@ void FuncPtrPass::dumpCallGraph() {
     FOREACH(CallGraph, callGraph, i) {
         CallInst* CI = i->first;
         FuncSet& FS = i->second;
-        StrSet strSet;
+        int lineNo = CI->getDebugLoc()->getLine();
+        if (!CONTAINS(result, lineNo))
+            result[lineNo] = StrSet();
+        StrSet& strSet = result[lineNo];
         FOREACH(FuncSet, FS, fi) {
             Function* F = *fi;
             strSet.insert(F->getName());
         }
-
-        int lineNo = CI->getDebugLoc()->getLine();
-        result[lineNo] = strSet;
     }
 
     FOREACH(SortedLineFuncsMap, result, i) {
