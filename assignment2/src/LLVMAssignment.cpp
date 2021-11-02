@@ -137,6 +137,9 @@ struct FuncPtrPass : public ModulePass {
   bool isDirectCall(CallInst* CI);
   bool addBinds4Params(Function* F, CallInst* CI);
   bool addBinds4Rets(Function* F, CallInst* CI);
+  bool canReach(PHINode* phi, int idx);
+  bool alwaysFalse(CmpInst* cmp);
+  bool alwaysTrue(CmpInst* cmp);
 
   void dumpCallGraph();
   void dumpPVVals();
@@ -175,14 +178,17 @@ void FuncPtrPass::collectIntraPVValsAndRets(Module& M) {
             Instruction* I = &*i;
 
             // solve phi node
-            // TODO: debug here
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
+                if (DEBUG) phi->dump();
                 for (int j = 0; j < n; j++) {
                     Value* value = phi->getIncomingValue(j);
+                    if (DEBUG) value->dump();
                     if (Function* funcPtr = dyn_cast<Function>(value)) {
-                        bool tmpChanged = false;
-                        INSERT2SETMAP(PVVals, pvVals, FVPair(F, phi), FuncSet, funcPtr, tmpChanged);
+                        if (canReach(phi, j)) {
+                            bool tmpChanged = false;
+                            INSERT2SETMAP(PVVals, pvVals, FVPair(F, phi), FuncSet, funcPtr, tmpChanged);
+                        }
                     }
                 }
             }
@@ -205,7 +211,76 @@ bool FuncPtrPass::isFuncPtrType(Type* type) {
 }
 
 bool FuncPtrPass::isFuncPtr(Value* value) {
-    return isFuncPtrType(value->getType()) && !isa<Function>(value) && !isa<ConstantPointerNull>(value);
+    return isFuncPtrType(value->getType()) &&
+        !isa<Function>(value) && !isa<ConstantPointerNull>(value);
+}
+
+bool FuncPtrPass::alwaysFalse(CmpInst* cmp) {
+    bool result = false;
+    CmpInst::Predicate predicate = cmp->getPredicate();
+    if (cmp->getNumOperands() == 2) {
+        ConstantInt* op0 = dyn_cast<ConstantInt>(cmp->getOperand(0));
+        ConstantInt* op1 = dyn_cast<ConstantInt>(cmp->getOperand(1));
+        if (op0 && op1) {
+            switch (predicate) {
+                case llvm::CmpInst::ICMP_SGT:
+                    result = (op0->getSExtValue() <= op1->getSExtValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return result;
+}
+
+bool FuncPtrPass::alwaysTrue(CmpInst* cmp) {
+    bool result = false;
+    CmpInst::Predicate predicate = cmp->getPredicate();
+    if (cmp->getNumOperands() == 2) {
+        ConstantInt* op0 = dyn_cast<ConstantInt>(cmp->getOperand(0));
+        ConstantInt* op1 = dyn_cast<ConstantInt>(cmp->getOperand(1));
+        if (op0 && op1) {
+            switch (predicate) {
+                case llvm::CmpInst::ICMP_SGT:
+                    result = (op0->getSExtValue() > op1->getSExtValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return result;
+}
+
+// value phi(idx) must not be null
+bool FuncPtrPass::canReach(PHINode* phi, int idx) {
+    BasicBlock* BB = phi->getIncomingBlock(idx);
+    BranchInst* BI = dyn_cast<BranchInst>(BB->getTerminator());
+    if (BI && !BI->isConditional()) {
+        if (BB->getSinglePredecessor())
+            BI = dyn_cast<BranchInst>(BB->getSinglePredecessor()->getTerminator());
+        else return true; // TODO: solve if ... else if ... for test8-13
+    }
+
+    if (CmpInst* cmp = dyn_cast<CmpInst>(BI->getCondition())) {
+        if (DEBUG) cmp->dump();
+
+        // always false, then will not reach then branch
+        if (alwaysFalse(cmp)
+            && BB == BI->getSuccessor(0)) {
+            Diag << "can never reach then\n";
+            return false;
+        }
+        // always true, then will not reach else branch
+        else if (alwaysTrue(cmp)
+            && BI->getNumSuccessors() == 2 && BB == BI->getSuccessor(1)) {
+            Diag << "can never reach else\n";
+            return false;
+        }
+    }
+    Diag << "can reach\n";
+    return true;
 }
 
 void FuncPtrPass::collectIntraPVBinds(Module& M) {
@@ -216,12 +291,11 @@ void FuncPtrPass::collectIntraPVBinds(Module& M) {
             Instruction* I = &*i;
 
             // solve phi node
-            // TODO: debug here
             if (PHINode* phi = dyn_cast<PHINode>(I)) {
                 int n = phi->getNumIncomingValues();
                 for (int j = 0; j < n; j++) {
                     Value* value = phi->getIncomingValue(j);
-                    if (isFuncPtr(value)) {
+                    if (isFuncPtr(value) && canReach(phi, j)) {
                         bool tmpChanged = false;
                         INSERT2SETMAP(PVBinds, pvBinds, FVPair(F, phi), FVPairSet, FVPair(F, value), tmpChanged);
                     }
