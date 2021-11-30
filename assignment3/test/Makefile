@@ -6,7 +6,7 @@ CFLAGS = -g -O0
 all: $(BC)
 
 %.bc: %.c
-	clang -emit-llvm $(CFALGS) -c $< -o $@ 
+	clang -emit-llvm $(CFLAGS) -c $< -o $@ 
 
 ll: $(LL)
 

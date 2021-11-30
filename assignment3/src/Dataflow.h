@@ -18,8 +18,16 @@
 
 using namespace llvm;
 
-///Base dataflow visitor class, defines the dataflow function
+///
+/// Dummy class to provide a typedef for the detailed result set
+/// For each basicblock, we compute its input dataflow val and its output dataflow val
+///
+template<class T>
+struct DataflowResult {
+    typedef typename std::map<BasicBlock *, std::pair<T, T> > Type;
+};
 
+///Base dataflow visitor class, defines the dataflow function
 template <class T>
 class DataflowVisitor {
 public:
@@ -32,18 +40,19 @@ public:
     /// @isforward true to compute dfval forward, otherwise backward
     /// @funcWorkList the inter-procedural worklist
     virtual void compDFVal(BasicBlock *block, T *dfval, bool isforward,
-                           FuncSet* funcWorkList = NULL) {
+                           FuncSet* funcWorkList = NULL,
+                           typename DataflowResult<T>::Type *result = NULL) {
         if (isforward == true) {
            for (BasicBlock::iterator ii=block->begin(), ie=block->end(); 
                 ii!=ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, funcWorkList);
+                compDFVal(inst, dfval, funcWorkList, result);
            }
         } else {
            for (BasicBlock::reverse_iterator ii=block->rbegin(), ie=block->rend();
                 ii != ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, funcWorkList);
+                compDFVal(inst, dfval, funcWorkList, result);
            }
         }
     }
@@ -55,7 +64,8 @@ public:
     /// @dfval the input dataflow value
     /// @funcWorkList the inter-procedural worklist
     /// @return true if dfval changed
-    virtual void compDFVal(Instruction *inst, T *dfval, FuncSet* funcWorkList) = 0;
+    virtual void compDFVal(Instruction *inst, T *dfval, FuncSet* funcWorkList,
+                           typename DataflowResult<T>::Type *result) = 0;
 
     ///
     /// Merge of two dfvals, dest will be ther merged result
@@ -64,14 +74,6 @@ public:
     virtual void merge( T *dest, const T &src ) = 0;
 };
 
-///
-/// Dummy class to provide a typedef for the detailed result set
-/// For each basicblock, we compute its input dataflow val and its output dataflow val
-///
-template<class T>
-struct DataflowResult {
-    typedef typename std::map<BasicBlock *, std::pair<T, T> > Type;
-};
 
 /// 
 /// Compute a forward iterated fixedpoint dataflow function, using a user-supplied
@@ -104,17 +106,19 @@ void compForwardDataflowInter(Function *fn,
     // Iteratively compute the dataflow result
     while (!worklist.empty()) {
         BasicBlock *bb = *worklist.begin();
+        if (bb == &bb->getParent()->getEntryBlock())
+            Diag << "is entry block!\n";
         worklist.erase(worklist.begin());
 
         // Merge all incoming value
-        T bbEntryVal = (*result)[bb].second;
+        T bbEntryVal = (*result)[bb].first;
         for (pred_iterator pi = pred_begin(bb), pe = pred_end(bb); pi != pe; pi++) {
             BasicBlock *pred = *pi;
             visitor->merge(&bbEntryVal, (*result)[pred].second);
         }
 
         (*result)[bb].first = bbEntryVal;
-        visitor->compDFVal(bb, &bbEntryVal, true, funcWorkList);
+        visitor->compDFVal(bb, &bbEntryVal, true, funcWorkList, result);
 
         // If outgoing value changed, propagate it along the CFG
         if (bbEntryVal == (*result)[bb].second) continue;

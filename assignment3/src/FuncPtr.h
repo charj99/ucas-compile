@@ -30,14 +30,16 @@ class FuncPtrVisitor : public DataflowVisitor<FuncPtrInfo> {
 private:
     Call2FuncSetMap CalleeMap;
     Func2CallSetMap CallerMap;
-    bool updateDstPointsToWithSrcPointsTo(V2VSetMap& funcPtrMap,
-                                          llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
+    bool updateDstPointsToWithSrcPointsTo(
+            V2VSetMap& dstFuncPtrMap, V2VSetMap& srcFuncPtrMap,
+            llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
 public:
     FuncPtrVisitor() : CalleeMap(), CallerMap() {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
-    void compDFVal(Instruction* inst, FuncPtrInfo* dfval, FuncSet* funcWorkList) override;
+    void compDFVal(Instruction* inst, FuncPtrInfo* dfval,
+                   FuncSet* funcWorkList, DataflowResult<FuncPtrInfo>::Type* result) override;
     const Call2FuncSetMap& getCalleeMap() {
         return CalleeMap;
     }
