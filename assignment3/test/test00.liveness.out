@@ -1,0 +1,155 @@
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  %0 = load i32, i32* %a.addr, align 4
+  %1 = load i32, i32* %b.addr, align 4
+  %add = add nsw i32 %0, %1
+  ret i32 %add
+}
+
+
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  %0 = load i32, i32* %a.addr, align 4
+  %1 = load i32, i32* %b.addr, align 4
+  %add = add nsw i32 %0, %1
+  ret i32 %add
+
+
+	in : 
+	out :  
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local i32 @minus(i32 %a, i32 %b) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  %0 = load i32, i32* %a.addr, align 4
+  %1 = load i32, i32* %b.addr, align 4
+  %sub = sub nsw i32 %0, %1
+  ret i32 %sub
+}
+
+
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  %0 = load i32, i32* %a.addr, align 4
+  %1 = load i32, i32* %b.addr, align 4
+  %sub = sub nsw i32 %0, %1
+  ret i32 %sub
+
+
+	in : 
+	out :  
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local i32 @foo(i32 %a, i32 %b, i32 (i32, i32)* %a_fptr) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8
+  %1 = load i32, i32* %a.addr, align 4
+  %2 = load i32, i32* %b.addr, align 4
+  %call = call i32 %0(i32 %1, i32 %2)
+  ret i32 %call
+}
+
+
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
+  store i32 %a, i32* %a.addr, align 4
+  store i32 %b, i32* %b.addr, align 4
+  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8
+  %1 = load i32, i32* %a.addr, align 4
+  %2 = load i32, i32* %b.addr, align 4
+  %call = call i32 %0(i32 %1, i32 %2)
+  ret i32 %call
+
+
+	in : 
+	out :  
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local i32 @moo(i8 signext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
+  %pf_ptr = alloca i32 (i32, i32)*, align 8
+  store i8 %x, i8* %x.addr, align 1
+  store i32 (i32, i32, i32 (i32, i32)*)* @foo, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  store i32 (i32, i32)* null, i32 (i32, i32)** %pf_ptr, align 8
+  %0 = load i8, i8* %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %cmp = icmp eq i32 %conv, 43
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %pf_ptr, align 8
+  %1 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  %2 = load i32 (i32, i32)*, i32 (i32, i32)** %pf_ptr, align 8
+  %call = call i32 %1(i32 1, i32 2, i32 (i32, i32)* %2)
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %pf_ptr, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %3 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  %4 = load i32 (i32, i32)*, i32 (i32, i32)** %pf_ptr, align 8
+  %call2 = call i32 %3(i32 1, i32 2, i32 (i32, i32)* %4)
+  ret i32 0
+}
+
+
+entry:
+  %x.addr = alloca i8, align 1
+  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
+  %pf_ptr = alloca i32 (i32, i32)*, align 8
+  store i8 %x, i8* %x.addr, align 1
+  store i32 (i32, i32, i32 (i32, i32)*)* @foo, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  store i32 (i32, i32)* null, i32 (i32, i32)** %pf_ptr, align 8
+  %0 = load i8, i8* %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %cmp = icmp eq i32 %conv, 43
+  br i1 %cmp, label %if.then, label %if.end
+
+
+	in : 
+	out :  af_ptr pf_ptr 
+
+if.then:                                          ; preds = %entry
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %pf_ptr, align 8
+  %1 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  %2 = load i32 (i32, i32)*, i32 (i32, i32)** %pf_ptr, align 8
+  %call = call i32 %1(i32 1, i32 2, i32 (i32, i32)* %2)
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %pf_ptr, align 8
+  br label %if.end
+
+
+	in : af_ptr pf_ptr 
+	out :  af_ptr pf_ptr 
+
+if.end:                                           ; preds = %if.then, %entry
+  %3 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8
+  %4 = load i32 (i32, i32)*, i32 (i32, i32)** %pf_ptr, align 8
+  %call2 = call i32 %3(i32 1, i32 2, i32 (i32, i32)* %4)
+  ret i32 0
+
+
+	in : af_ptr pf_ptr 
+	out :  
+sh: 1: pause: not found

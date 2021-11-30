@@ -31,6 +31,8 @@
 #include <llvm/Support/raw_ostream.h>
 
 #include "Liveness.h"
+#include "FuncPtr.h"
+
 using namespace llvm;
 static ManagedStatic<LLVMContext> GlobalContext;
 static LLVMContext &getGlobalContext() { return *GlobalContext; }
@@ -49,20 +51,6 @@ struct EnableFunctionOptPass : public FunctionPass {
 
 char EnableFunctionOptPass::ID = 0;
 
-///!TODO TO BE COMPLETED BY YOU FOR ASSIGNMENT 3
-struct FuncPtrPass : public ModulePass {
-    static char ID; // Pass identification, replacement for typeid
-    FuncPtrPass() : ModulePass(ID) {}
-
-
-    bool runOnModule(Module &M) override {
-        errs() << "Hello: ";
-        errs().write_escaped(M.getName()) << '\n';
-        M.dump();
-        errs() << "------------------------------\n";
-        return false;
-    }
-};
 
 
 char FuncPtrPass::ID = 0;
@@ -75,7 +63,6 @@ static cl::opt<std::string>
 InputFilename(cl::Positional,
               cl::desc("<filename>.bc"),
               cl::init(""));
-
 
 int main(int argc, char **argv) {
    LLVMContext &Context = getGlobalContext();

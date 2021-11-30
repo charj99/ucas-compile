@@ -52,7 +52,7 @@ public:
        }
    }
 
-   void compDFVal(Instruction *inst, LivenessInfo * dfval) override{
+   void compDFVal(Instruction *inst, LivenessInfo * dfval, FuncSet* funcWorkList) override{
         if (isa<DbgInfoIntrinsic>(inst)) return;
         dfval->LiveVars.erase(inst);
         for(User::op_iterator oi = inst->op_begin(), oe = inst->op_end();

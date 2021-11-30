@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0)
-project(assign2)
+project(assign3)
+
+# add by xjj [begin]
+set(LLVM_DIR "/usr/local/llvm10ra")
+set(Clang_DIR "/usr/local/llvm10ra/lib/cmake/clang")
+#add by xjj [end]
+
 find_package(LLVM REQUIRED CONFIG HINTS ${LLVM_DIR} ${LLVM_DIR}/lib/cmake/llvm
 	                NO_DEFAULT_PATH)
 

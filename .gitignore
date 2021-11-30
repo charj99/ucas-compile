@@ -9,4 +9,8 @@ assignment2/src/cmake-build-debug
 assignment2/src/.clion.source.upload.marker
 assignment2/test/*.bc
 assignment2/test/*.ll
-
+assignment3/src/.idea
+assignment3/src/cmake-build-debug
+assignment3/test/*.bc
+assignment3/test/*.ll
+assignment3/src/.clion.source.upload.marker
