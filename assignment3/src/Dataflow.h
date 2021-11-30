@@ -84,7 +84,7 @@ struct DataflowResult {
 /// @initval the Initial dataflow value
 /// @param funcWorkList The work list of inter-procedural analysis(stores functions)
 template<class T>
-bool compForwardDataflowInter(Function *fn,
+void compForwardDataflowInter(Function *fn,
                               DataflowVisitor<T> *visitor,
                               typename DataflowResult<T>::Type *result,
                               const T & initval,
@@ -95,7 +95,9 @@ bool compForwardDataflowInter(Function *fn,
     // Initialize the worklist with all exit blocks
     for (Function::iterator bi = fn->begin(); bi != fn->end(); ++bi) {
         BasicBlock * bb = &*bi;
-        result->insert(std::make_pair(bb, std::make_pair(initval, initval)));
+        // TODO: init
+        if (result->find(bb) == result->end())
+            result->insert(std::make_pair(bb, std::make_pair(initval, initval)));
         worklist.insert(bb);
     }
 
