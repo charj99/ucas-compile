@@ -1,5815 +1,1203 @@
-is entry block!
+################## pointer before #################
+  %a.addr = alloca i32, align 4
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+################## pointer before #################
+  %b.addr = alloca i32, align 4
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+################## pointer before #################
+  store i32 %a, i32* %a.addr, align 4
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !21, metadata !DIExpression()), !dbg !22
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+################## pointer before #################
+  store i32 %b, i32* %b.addr, align 4
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !23, metadata !DIExpression()), !dbg !24
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+################## pointer before #################
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+################## pointer before #################
+  %1 = load i32, i32* %b.addr, align 4, !dbg !26
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
+: {
+	a.addr,
+},
+################## pointer before #################
+  %add = add nsw i32 %0, %1, !dbg !27
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
+: {
+	a.addr,
+},
+  %1 = load i32, i32* %b.addr, align 4, !dbg !26
+: {
+	b.addr,
+},
+################## pointer before #################
+  ret i32 %add, !dbg !28
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
+: {
+	a.addr,
+},
+  %1 = load i32, i32* %b.addr, align 4, !dbg !26
+: {
+	b.addr,
+},
 1: plus------------------------------
 
 entry:
   %a.addr = alloca i32, align 4
   %b.addr = alloca i32, align 4
   store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
+  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !21, metadata !DIExpression()), !dbg !22
   store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
+  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !23, metadata !DIExpression()), !dbg !24
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
+  %1 = load i32, i32* %b.addr, align 4, !dbg !26
+  %add = add nsw i32 %0, %1, !dbg !27
+  ret i32 %add, !dbg !28
 
 
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+	in : plus: {
+	plus,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+moo: {
+	moo,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+minus: {
+	minus,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+
+	out :  plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+a.addr: {
+	a.addr,
+},
+b.addr: {
+	b.addr,
+},
+  %0 = load i32, i32* %a.addr, align 4, !dbg !25
 : {
-	b,
+	a.addr,
+},
+  %1 = load i32, i32* %b.addr, align 4, !dbg !26
+: {
+	b.addr,
 },
 
 ------------------------------
-2: llvm.dbg.declare------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+################## pointer before #################
+  %x.addr = alloca i32, align 4
+plus: {
+	plus,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+moo: {
+	moo,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+minus: {
+	minus,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
+clever: {
+	clever,
 },
-
-------------------------------
-is entry block!
-3: minus------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+foo: {
+	foo,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+malloc: {
+	malloc,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+################## pointer before #################
+  %a_fptr = alloca %struct.fptr, align 8
+plus: {
+	plus,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
+moo: {
+	moo,
 },
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %sub = sub nsw i32 %0, %1, !dbg !19
-  ret i32 %sub, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+minus: {
+	minus,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+clever: {
+	clever,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+foo: {
+	foo,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
+malloc: {
+	malloc,
 },
-
-------------------------------
-is entry block!
-4: foo------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+x.addr: {
+	x.addr,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+################## pointer before #################
+  %b_fptr = alloca %struct.fptr, align 8
+plus: {
+	plus,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+moo: {
+	moo,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
+minus: {
+	minus,
 },
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %sub = sub nsw i32 %0, %1, !dbg !19
-  ret i32 %sub, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
+clever: {
+	clever,
 },
-  %b.addr = alloca i32, align 4
-: {
-	b,
+foo: {
+	foo,
 },
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
+malloc: {
+	malloc,
 },
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
+x.addr: {
+	x.addr,
 },
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !16, metadata !DIExpression()), !dbg !17
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !18, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr.addr, metadata !20, metadata !DIExpression()), !dbg !21
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-  %call = call i32 %0(i32 %1, i32 %2), !dbg !22
-  ret i32 %call, !dbg !25
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	a_fptr,
 },
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-: {
+################## pointer before #################
+  %s_fptr = alloca %struct.fsptr, align 8
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
 	a_fptr,
 },
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-: {
-	a,
+b_fptr: {
+	b_fptr,
 },
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-: {
-	b,
-},
-
-------------------------------
-is entry block!
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+################## pointer before #################
+  %r_fptr = alloca %struct.fsptr, align 8
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-############ [after] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-i32 %a
-: {
-	i32 1
-,
-},
-############ call-site #############
-
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-############ [after] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-############ call-site #############
-
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-############ [after] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-############ call-site #############
-
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-############ [after] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ call-site #############
-
-5: clever------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %sub = sub nsw i32 %0, %1, !dbg !19
-  ret i32 %sub, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !16, metadata !DIExpression()), !dbg !17
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !18, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr.addr, metadata !20, metadata !DIExpression()), !dbg !21
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-  %call = call i32 %0(i32 %1, i32 %2), !dbg !22
-  ret i32 %call, !dbg !25
-
-
-	in : i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	a_fptr,
 },
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-: {
+b_fptr: {
+	b_fptr,
+},
+s_fptr: {
+	s_fptr,
+},
+################## pointer before #################
+  %w_fptr = alloca %struct.fsptr*, align 8
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
 	a_fptr,
 },
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-: {
-	a,
+b_fptr: {
+	b_fptr,
 },
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-: {
-	b,
+s_fptr: {
+	s_fptr,
 },
-
-
-entry:
-  %x.addr = alloca i32, align 4
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-  %op1 = alloca i32, align 4
-  %op2 = alloca i32, align 4
-  %result = alloca i32, align 4
+r_fptr: {
+	r_fptr,
+},
+################## pointer before #################
   store i32 %x, i32* %x.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %x.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr, metadata !15, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* @plus, i32 (i32, i32)** %a_fptr, align 8, !dbg !19
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %s_fptr, metadata !20, metadata !DIExpression()), !dbg !21
-  store i32 (i32, i32)* @minus, i32 (i32, i32)** %s_fptr, align 8, !dbg !21
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %t_fptr, metadata !22, metadata !DIExpression()), !dbg !23
-  store i32 (i32, i32)* null, i32 (i32, i32)** %t_fptr, align 8, !dbg !23
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %q_fptr, metadata !24, metadata !DIExpression()), !dbg !25
-  store i32 (i32, i32)* null, i32 (i32, i32)** %q_fptr, align 8, !dbg !25
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %r_fptr, metadata !26, metadata !DIExpression()), !dbg !27
-  store i32 (i32, i32)* null, i32 (i32, i32)** %r_fptr, align 8, !dbg !27
-  call void @llvm.dbg.declare(metadata i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, metadata !28, metadata !DIExpression()), !dbg !32
-  store i32 (i32, i32, i32 (i32, i32)*)* @foo, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !32
-  call void @llvm.dbg.declare(metadata i32* %op1, metadata !33, metadata !DIExpression()), !dbg !34
-  store i32 1, i32* %op1, align 4, !dbg !34
-  call void @llvm.dbg.declare(metadata i32* %op2, metadata !35, metadata !DIExpression()), !dbg !36
-  store i32 2, i32* %op2, align 4, !dbg !36
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-  %cmp = icmp sge i32 %0, 4, !dbg !39
-  br i1 %cmp, label %if.then, label %if.end, !dbg !40
-
-
-	in : 
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-
-
-if.then:                                          ; preds = %entry
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-  store i32 (i32, i32)* %1, i32 (i32, i32)** %t_fptr, align 8, !dbg !43
-  br label %if.end, !dbg !44
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-  %cmp1 = icmp sge i32 %6, 5, !dbg !51
-  br i1 %cmp1, label %if.then2, label %if.end3, !dbg !52
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-
-
-if.then2:                                         ; preds = %if.end
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-  store i32 (i32, i32)* %7, i32 (i32, i32)** %t_fptr, align 8, !dbg !55
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-  store i32 (i32, i32)* %8, i32 (i32, i32)** %q_fptr, align 8, !dbg !57
-  br label %if.end3, !dbg !58
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-
-
-if.end3:                                          ; preds = %if.then2, %if.end
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-  %cmp4 = icmp ne i32 (i32, i32)* %9, null, !dbg !61
-  br i1 %cmp4, label %if.then5, label %if.end7, !dbg !62
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-
-
-if.then5:                                         ; preds = %if.end3
-  call void @llvm.dbg.declare(metadata i32* %result, metadata !63, metadata !DIExpression()), !dbg !66
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  store i32 %call6, i32* %result, align 4, !dbg !66
-  br label %if.end7, !dbg !71
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-
-if.end7:                                          ; preds = %if.then5, %if.end3
-  ret i32 0, !dbg !72
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-------------------------------
-is entry block!
-6: foo------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %sub = sub nsw i32 %0, %1, !dbg !19
-  ret i32 %sub, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !16, metadata !DIExpression()), !dbg !17
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !18, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr.addr, metadata !20, metadata !DIExpression()), !dbg !21
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-  %call = call i32 %0(i32 %1, i32 %2), !dbg !22
-  ret i32 %call, !dbg !25
-
-
-	in : i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-
-	out :  i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-  %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	a_fptr,
 },
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-: {
+b_fptr: {
+	b_fptr,
+},
+s_fptr: {
+	s_fptr,
+},
+r_fptr: {
+	r_fptr,
+},
+w_fptr: {
+	w_fptr,
+},
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata i32* %x.addr, metadata !100, metadata !DIExpression()), !dbg !101
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
 	a_fptr,
 },
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-: {
-	a,
+b_fptr: {
+	b_fptr,
 },
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-: {
-	b,
+s_fptr: {
+	s_fptr,
 },
-
-
-entry:
-  %x.addr = alloca i32, align 4
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-  %op1 = alloca i32, align 4
-  %op2 = alloca i32, align 4
-  %result = alloca i32, align 4
-  store i32 %x, i32* %x.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %x.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr, metadata !15, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* @plus, i32 (i32, i32)** %a_fptr, align 8, !dbg !19
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %s_fptr, metadata !20, metadata !DIExpression()), !dbg !21
-  store i32 (i32, i32)* @minus, i32 (i32, i32)** %s_fptr, align 8, !dbg !21
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %t_fptr, metadata !22, metadata !DIExpression()), !dbg !23
-  store i32 (i32, i32)* null, i32 (i32, i32)** %t_fptr, align 8, !dbg !23
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %q_fptr, metadata !24, metadata !DIExpression()), !dbg !25
-  store i32 (i32, i32)* null, i32 (i32, i32)** %q_fptr, align 8, !dbg !25
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %r_fptr, metadata !26, metadata !DIExpression()), !dbg !27
-  store i32 (i32, i32)* null, i32 (i32, i32)** %r_fptr, align 8, !dbg !27
-  call void @llvm.dbg.declare(metadata i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, metadata !28, metadata !DIExpression()), !dbg !32
-  store i32 (i32, i32, i32 (i32, i32)*)* @foo, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !32
-  call void @llvm.dbg.declare(metadata i32* %op1, metadata !33, metadata !DIExpression()), !dbg !34
-  store i32 1, i32* %op1, align 4, !dbg !34
-  call void @llvm.dbg.declare(metadata i32* %op2, metadata !35, metadata !DIExpression()), !dbg !36
-  store i32 2, i32* %op2, align 4, !dbg !36
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-  %cmp = icmp sge i32 %0, 4, !dbg !39
-  br i1 %cmp, label %if.then, label %if.end, !dbg !40
-
-
-	in :   %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
+r_fptr: {
+	r_fptr,
 },
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
+w_fptr: {
+	w_fptr,
 },
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata %struct.fptr* %a_fptr, metadata !102, metadata !DIExpression()), !dbg !103
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-
-
-if.then:                                          ; preds = %entry
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-  store i32 (i32, i32)* %1, i32 (i32, i32)** %t_fptr, align 8, !dbg !43
-  br label %if.end, !dbg !44
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-  %cmp1 = icmp sge i32 %6, 5, !dbg !51
-  br i1 %cmp1, label %if.then2, label %if.end3, !dbg !52
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-
-
-if.then2:                                         ; preds = %if.end
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-  store i32 (i32, i32)* %7, i32 (i32, i32)** %t_fptr, align 8, !dbg !55
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-  store i32 (i32, i32)* %8, i32 (i32, i32)** %q_fptr, align 8, !dbg !57
-  br label %if.end3, !dbg !58
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-
-
-if.end3:                                          ; preds = %if.then2, %if.end
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-  %cmp4 = icmp ne i32 (i32, i32)* %9, null, !dbg !61
-  br i1 %cmp4, label %if.then5, label %if.end7, !dbg !62
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-
-
-if.then5:                                         ; preds = %if.end3
-  call void @llvm.dbg.declare(metadata i32* %result, metadata !63, metadata !DIExpression()), !dbg !66
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  store i32 %call6, i32* %result, align 4, !dbg !66
-  br label %if.end7, !dbg !71
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-
-if.end7:                                          ; preds = %if.then5, %if.end3
-  ret i32 0, !dbg !72
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-
-------------------------------
-is entry block!
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ [before] call-site #############
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-############ [before] call-site #############
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
-},
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
-},
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
-	plus,
-},
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
----------------------------------------------
-i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-7: clever------------------------------
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %add = add nsw i32 %0, %1, !dbg !19
-  ret i32 %add, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-  %sub = sub nsw i32 %0, %1, !dbg !19
-  ret i32 %sub, !dbg !20
-
-
-	in : 
-	out :    %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %0 = load i32, i32* %a.addr, align 4, !dbg !17
-: {
-	a,
-},
-  %1 = load i32, i32* %b.addr, align 4, !dbg !18
-: {
-	b,
-},
-
-
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-  store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !16, metadata !DIExpression()), !dbg !17
-  store i32 %b, i32* %b.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %b.addr, metadata !18, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* %a_fptr, i32 (i32, i32)** %a_fptr.addr, align 8
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr.addr, metadata !20, metadata !DIExpression()), !dbg !21
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-  %call = call i32 %0(i32 %1, i32 %2), !dbg !22
-  ret i32 %call, !dbg !25
-
-
-	in : i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-
-	out :  i32 %a
-: {
-	i32 1
-,
-},
-i32 %b
-: {
-	i32 2
-,
-},
-i32 (i32, i32)* %a_fptr
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-},
-  %a.addr = alloca i32, align 4
-: {
-	a,
-},
-  %b.addr = alloca i32, align 4
-: {
-	b,
-},
-  %a_fptr.addr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	a_fptr,
 },
-  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr.addr, align 8, !dbg !22
-: {
+b_fptr: {
+	b_fptr,
+},
+s_fptr: {
+	s_fptr,
+},
+r_fptr: {
+	r_fptr,
+},
+w_fptr: {
+	w_fptr,
+},
+################## pointer before #################
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0, !dbg !27
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
 	a_fptr,
 },
-  %1 = load i32, i32* %a.addr, align 4, !dbg !23
-: {
-	a,
+b_fptr: {
+	b_fptr,
 },
-  %2 = load i32, i32* %b.addr, align 4, !dbg !24
-: {
-	b,
+s_fptr: {
+	s_fptr,
 },
-
-
-entry:
-  %x.addr = alloca i32, align 4
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-  %op1 = alloca i32, align 4
-  %op2 = alloca i32, align 4
-  %result = alloca i32, align 4
-  store i32 %x, i32* %x.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %x.addr, metadata !13, metadata !DIExpression()), !dbg !14
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %a_fptr, metadata !15, metadata !DIExpression()), !dbg !19
-  store i32 (i32, i32)* @plus, i32 (i32, i32)** %a_fptr, align 8, !dbg !19
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %s_fptr, metadata !20, metadata !DIExpression()), !dbg !21
-  store i32 (i32, i32)* @minus, i32 (i32, i32)** %s_fptr, align 8, !dbg !21
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %t_fptr, metadata !22, metadata !DIExpression()), !dbg !23
-  store i32 (i32, i32)* null, i32 (i32, i32)** %t_fptr, align 8, !dbg !23
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %q_fptr, metadata !24, metadata !DIExpression()), !dbg !25
-  store i32 (i32, i32)* null, i32 (i32, i32)** %q_fptr, align 8, !dbg !25
-  call void @llvm.dbg.declare(metadata i32 (i32, i32)** %r_fptr, metadata !26, metadata !DIExpression()), !dbg !27
-  store i32 (i32, i32)* null, i32 (i32, i32)** %r_fptr, align 8, !dbg !27
-  call void @llvm.dbg.declare(metadata i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, metadata !28, metadata !DIExpression()), !dbg !32
-  store i32 (i32, i32, i32 (i32, i32)*)* @foo, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !32
-  call void @llvm.dbg.declare(metadata i32* %op1, metadata !33, metadata !DIExpression()), !dbg !34
-  store i32 1, i32* %op1, align 4, !dbg !34
-  call void @llvm.dbg.declare(metadata i32* %op2, metadata !35, metadata !DIExpression()), !dbg !36
-  store i32 2, i32* %op2, align 4, !dbg !36
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-  %cmp = icmp sge i32 %0, 4, !dbg !39
-  br i1 %cmp, label %if.then, label %if.end, !dbg !40
-
-
-	in :   %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
+r_fptr: {
+	r_fptr,
 },
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
+w_fptr: {
+	w_fptr,
 },
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+################## pointer before #################
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %p_fptr, align 8, !dbg !28
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
+a_fptr: {
+	a_fptr,
 },
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
+b_fptr: {
+	b_fptr,
 },
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
+s_fptr: {
+	s_fptr,
 },
-
-
-if.then:                                          ; preds = %entry
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-  store i32 (i32, i32)* %1, i32 (i32, i32)** %t_fptr, align 8, !dbg !43
-  br label %if.end, !dbg !44
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
+r_fptr: {
+	r_fptr,
 },
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata %struct.fptr* %b_fptr, metadata !106, metadata !DIExpression()), !dbg !107
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
+b_fptr: {
+	b_fptr,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-  %cmp1 = icmp sge i32 %6, 5, !dbg !51
-  br i1 %cmp1, label %if.then2, label %if.end3, !dbg !52
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+################## pointer before #################
+  %p_fptr1 = getelementptr inbounds %struct.fptr, %struct.fptr* %b_fptr, i32 0, i32 0, !dbg !31
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
+b_fptr: {
+	b_fptr,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
-},
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-
-if.then2:                                         ; preds = %if.end
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-  store i32 (i32, i32)* %7, i32 (i32, i32)** %t_fptr, align 8, !dbg !55
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-  store i32 (i32, i32)* %8, i32 (i32, i32)** %q_fptr, align 8, !dbg !57
-  br label %if.end3, !dbg !58
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+################## pointer before #################
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %p_fptr1, align 8, !dbg !32
+plus: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+moo: {
+	moo,
+},
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
+a_fptr: {
 	plus,
 },
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	minus,
+b_fptr: {
+	b_fptr,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+p_fptr1: {
+	b_fptr,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata %struct.fsptr* %s_fptr, metadata !110, metadata !DIExpression()), !dbg !111
+plus: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
+moo: {
+	moo,
 },
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-
-if.end3:                                          ; preds = %if.then2, %if.end
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-  %cmp4 = icmp ne i32 (i32, i32)* %9, null, !dbg !61
-  br i1 %cmp4, label %if.then5, label %if.end7, !dbg !62
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+a_fptr: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+b_fptr: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+p_fptr1: {
+	b_fptr,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+################## pointer before #################
+  %sptr = getelementptr inbounds %struct.fsptr, %struct.fsptr* %s_fptr, i32 0, i32 0, !dbg !35
+plus: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
+moo: {
+	moo,
 },
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-
-if.then5:                                         ; preds = %if.end3
-  call void @llvm.dbg.declare(metadata i32* %result, metadata !63, metadata !DIExpression()), !dbg !66
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-  store i32 %call6, i32* %result, align 4, !dbg !66
-  br label %if.end7, !dbg !71
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+a_fptr: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+b_fptr: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+p_fptr1: {
+	b_fptr,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
-},
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+################## pointer before #################
+  store %struct.fptr* %a_fptr, %struct.fptr** %sptr, align 8, !dbg !36
+plus: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
+moo: {
+	moo,
 },
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-
-if.end7:                                          ; preds = %if.then5, %if.end3
-  ret i32 0, !dbg !72
-
-
-	in :   %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+minus: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+clever: {
+	clever,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
-},
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
+foo: {
 	foo,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+a_fptr: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-},
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
-	foo,
-},
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
-},
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
-},
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
-},
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
-},
-
-	out :    %x.addr = alloca i32, align 4
-: {
-	x,
-},
-  %a_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	plus,
-},
-  %s_fptr = alloca i32 (i32, i32)*, align 8
-: {
+b_fptr: {
 	minus,
 },
-  %t_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+s_fptr: {
+	s_fptr,
 },
-  %q_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
+r_fptr: {
+	r_fptr,
 },
-  %r_fptr = alloca i32 (i32, i32)*, align 8
-: {
-	i32 (i32, i32)* null
-,
+w_fptr: {
+	w_fptr,
 },
-  %af_ptr = alloca i32 (i32, i32, i32 (i32, i32)*)*, align 8
-: {
-	foo,
+p_fptr: {
+	a_fptr,
 },
-  %op1 = alloca i32, align 4
-: {
-	i32 1
-,
+p_fptr1: {
+	b_fptr,
 },
-  %op2 = alloca i32, align 4
-: {
-	i32 2
-,
+sptr: {
+	s_fptr,
 },
-  %result = alloca i32, align 4
-: {
-	call6,
-},
-  %0 = load i32, i32* %x.addr, align 4, !dbg !37
-: {
-	x,
-},
-  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-: {
-	minus,
-},
-  %2 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !45
-: {
-	foo,
-},
-  %3 = load i32, i32* %op1, align 4, !dbg !46
-: {
-	i32 1
-,
-},
-  %4 = load i32, i32* %op2, align 4, !dbg !47
-: {
-	i32 2
-,
-},
-  %5 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !48
-: {
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
-},
-  %call = call i32 %2(i32 %3, i32 %4, i32 (i32, i32)* %5), !dbg !45
-: {
-	call,
-},
-  %6 = load i32, i32* %x.addr, align 4, !dbg !49
-: {
-	x,
-},
-  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-: {
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata %struct.fsptr* %r_fptr, metadata !114, metadata !DIExpression()), !dbg !115
+plus: {
 	plus,
 },
-  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
+moo: {
+	moo,
 },
-  %9 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !59
-: {
-	  %7 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8, !dbg !53
-,
-	  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %s_fptr, align 8, !dbg !41
-,
-	i32 (i32, i32)* null
-,
+minus: {
+	minus,
 },
-  %10 = load i32 (i32, i32, i32 (i32, i32)*)*, i32 (i32, i32, i32 (i32, i32)*)** %af_ptr, align 8, !dbg !67
-: {
+clever: {
+	clever,
+},
+foo: {
 	foo,
 },
-  %11 = load i32, i32* %op1, align 4, !dbg !68
-: {
-	i32 1
-,
+malloc: {
+	malloc,
 },
-  %12 = load i32, i32* %op2, align 4, !dbg !69
-: {
-	i32 2
-,
+x.addr: {
+	x.addr,
 },
-  %13 = load i32 (i32, i32)*, i32 (i32, i32)** %q_fptr, align 8, !dbg !70
-: {
-	  %8 = load i32 (i32, i32)*, i32 (i32, i32)** %t_fptr, align 8, !dbg !56
-,
-	i32 (i32, i32)* null
-,
+a_fptr: {
+	plus,
 },
-  %call6 = call i32 %10(i32 %11, i32 %12, i32 (i32, i32)* %13), !dbg !67
-: {
-	call,
+b_fptr: {
+	minus,
 },
-
-------------------------------
-33: foo
-26: foo
-sh: 1: pause: not found
+s_fptr: {
+	plus,
+},
+r_fptr: {
+	r_fptr,
+},
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+p_fptr1: {
+	b_fptr,
+},
+sptr: {
+	s_fptr,
+},
+################## pointer before #################
+  %sptr2 = getelementptr inbounds %struct.fsptr, %struct.fsptr* %r_fptr, i32 0, i32 0, !dbg !39
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
+	plus,
+},
+b_fptr: {
+	minus,
+},
+s_fptr: {
+	plus,
+},
+r_fptr: {
+	r_fptr,
+},
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+p_fptr1: {
+	b_fptr,
+},
+sptr: {
+	s_fptr,
+},
+################## pointer before #################
+  store %struct.fptr* %b_fptr, %struct.fptr** %sptr2, align 8, !dbg !40
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
+	plus,
+},
+b_fptr: {
+	minus,
+},
+s_fptr: {
+	plus,
+},
+r_fptr: {
+	r_fptr,
+},
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+p_fptr1: {
+	b_fptr,
+},
+sptr: {
+	s_fptr,
+},
+sptr2: {
+	r_fptr,
+},
+################## pointer before #################
+  call void @llvm.dbg.declare(metadata %struct.fsptr** %w_fptr, metadata !118, metadata !DIExpression()), !dbg !119
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
+	plus,
+},
+b_fptr: {
+	minus,
+},
+s_fptr: {
+	plus,
+},
+r_fptr: {
+	minus,
+},
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+p_fptr1: {
+	b_fptr,
+},
+sptr: {
+	s_fptr,
+},
+sptr2: {
+	r_fptr,
+},
+################## pointer before #################
+  %call = call noalias i8* @malloc(i64 8) #4, !dbg !43
+plus: {
+	plus,
+},
+moo: {
+	moo,
+},
+minus: {
+	minus,
+},
+clever: {
+	clever,
+},
+foo: {
+	foo,
+},
+malloc: {
+	malloc,
+},
+x.addr: {
+	x.addr,
+},
+a_fptr: {
+	plus,
+},
+b_fptr: {
+	minus,
+},
+s_fptr: {
+	plus,
+},
+r_fptr: {
+	minus,
+},
+w_fptr: {
+	w_fptr,
+},
+p_fptr: {
+	a_fptr,
+},
+p_fptr1: {
+	b_fptr,
+},
+sptr: {
+	s_fptr,
+},
+sptr2: {
+	r_fptr,
+},
+assignment3: /usr/local/llvm10ra/include/llvm/ADT/ilist_iterator.h:139: llvm::ilist_iterator::reference llvm::ilist_iterator<llvm::ilist_detail::node_options<llvm::BasicBlock, true, false, void>, false, false>::operator*() const [OptionsT = llvm::ilist_detail::node_options<llvm::BasicBlock, true, false, void>, IsReverse = false, IsConst = false]: Assertion `!NodePtr->isKnownSentinel()' failed.

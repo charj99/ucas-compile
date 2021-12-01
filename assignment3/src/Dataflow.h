@@ -106,10 +106,9 @@ void compForwardDataflowInter(Function *fn,
     // Iteratively compute the dataflow result
     while (!worklist.empty()) {
         BasicBlock *bb = *worklist.begin();
-        if (bb == &bb->getParent()->getEntryBlock())
-            Diag << "is entry block!\n";
         worklist.erase(worklist.begin());
 
+        // bb->dump();
         // Merge all incoming value
         T bbEntryVal = (*result)[bb].first;
         for (pred_iterator pi = pred_begin(bb), pe = pred_end(bb); pi != pe; pi++) {

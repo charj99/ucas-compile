@@ -12,7 +12,8 @@ inline raw_ostream& operator<<(raw_ostream& out, const FuncPtrInfo& info) {
     for (auto item : info.FuncPtrs) {
         Value* key = item.first;
         ValueSet& value = item.second;
-        key->dump();
+        if (key->hasName()) out << key->getName();
+        else key->dump();
         out << ": {\n";
         for (auto v : value) {
             out << "\t";
@@ -39,42 +40,29 @@ void FuncPtrVisitor::merge(FuncPtrInfo *dest, const FuncPtrInfo &src) {
 }
 
 /*
- * if src->{}, dst->src
- * if src->S(src), dst->S(src)
+ * strong update: if src->S(src), dst->S(src)
+ * not strong update: if src->S(src), dst->S(dst) \cup S(src)
  */
 bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
         V2VSetMap &dstFuncPtrMap, V2VSetMap& srcFuncPtrMap,
         Value *dst, Value *src, bool strongUpdate) {
     V2VSetMap::iterator it = srcFuncPtrMap.find(src);
     bool changed = false;
+    // if b->{}, do nothing
+    if (it == srcFuncPtrMap.end())
+        return changed;
 
-    // if b->{}, a->b or a->S(a) \cup b
-    if (it == srcFuncPtrMap.end()) {
-        // if b->{}, a->b
-        if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
-            ValueSet srcPointsTo = ValueSet({src});
-            if (dstFuncPtrMap[dst] != srcPointsTo) {
-                dstFuncPtrMap[dst] = srcPointsTo;
-                changed = true;
-            }
+    // strong update: if src->S(src), dst->S(src)
+    if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
+        if (dstFuncPtrMap[dst] != it->second) {
+            dstFuncPtrMap[dst] = it->second;
+            changed = true;
         }
-        // if b->{}, a->S(a) \cup b
-        else changed |= dstFuncPtrMap[dst].insert(src).second;
     }
-    // if b->S(b), a->S(b) or a->S(a) \cup S(b)
+    // not strong update: if src->S(src), dst->S(dst) \cup S(src)
     else {
-        // if b->S(b), a->S(b)
-        if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
-            if (dstFuncPtrMap[dst] != it->second) {
-                dstFuncPtrMap[dst] = it->second;
-                changed = true;
-            }
-        }
-        // if b->S(b), a->S(a) \cup S(b)
-        else {
-            for (auto srcPointsTo : it->second)
-                changed |= dstFuncPtrMap[dst].insert(srcPointsTo).second;
-        }
+        for (auto srcPointsTo : it->second)
+            changed |= dstFuncPtrMap[dst].insert(srcPointsTo).second;
     }
     return changed;
 }
@@ -93,18 +81,22 @@ void FuncPtrVisitor::getCallees(V2VSetMap& funcPtrMap, CallInst* CI) {
         return;
     }
     ValueSet worklist;
+    ValueSet visited;
     worklist.insert(CI->getCalledValue());
 
     while (!worklist.empty()) {
         Value* u = *worklist.begin();
         worklist.erase(u);
+        visited.insert(u);
+
         if (Function* F = dyn_cast<Function>(u))
             linkCallSiteAndCallee(CI, F);
         else {
             if (!CONTAINS(funcPtrMap, u)) continue;
             const ValueSet& valueSet = funcPtrMap[u];
             for (auto v : valueSet)
-                worklist.insert(v);
+                if (!CONTAINS(visited, v))
+                    worklist.insert(v);
         }
     }
 }
@@ -113,14 +105,31 @@ void FuncPtrVisitor::getCallees(V2VSetMap& funcPtrMap, CallInst* CI) {
 void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                                FuncSet *funcWorkList,
                                DataflowResult<FuncPtrInfo>::Type* result) {
+    Diag << "################## pointer before #################\n";
+    if (DEBUG) inst->dump();
+    Diag << *dfval;
     /*
      * a = *b,
-     * if b->{}, a->b
-     * if b->S(b), a->S(b)
+     * if b->S(b), a->S(S(b))
      */
     if (LoadInst* LI = dyn_cast<LoadInst>(inst)) {
+        /*
+        Diag << "############ [before] load #############\n";
+        if (DEBUG) LI->dump();
+        Diag << *dfval;
+        */
         Value* src = LI->getPointerOperand();
-        updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, LI, src);
+        V2VSetMap::iterator it = dfval->FuncPtrs.find(src);
+        if (it == dfval->FuncPtrs.end()) return;
+        ValueSet& valueSet = it->second;
+        for (auto v : valueSet)
+            updateDstPointsToWithSrcPointsTo(
+                    dfval->FuncPtrs, dfval->FuncPtrs, LI, v, false);
+        /*
+        Diag << "############ [after] load #############\n";
+        if (DEBUG) LI->dump();
+        Diag << *dfval;
+        */
     }
 
     /*
@@ -130,11 +139,15 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
      */
     else if (StoreInst* SI = dyn_cast<StoreInst>(inst)) {
+        /*
+        Diag << "############ [before] store #############\n";
+        if (DEBUG) SI->dump();
+        Diag << *dfval;
+        */
         Value* src = SI->getValueOperand();
         Value* dst = SI->getPointerOperand();
-        // a->b
-        dfval->FuncPtrs[dst] = ValueSet({src});
-        /*
+        // a->b // dfval->FuncPtrs[dst] = ValueSet({src});
+
         V2VSetMap::iterator it = dfval->FuncPtrs.find(dst);
         // if a->{}, do nothing
         if (it == dfval->FuncPtrs.end()) return;
@@ -142,13 +155,19 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         // if a->{x}, x->S(b),
         if (it->second.size() == 1) {
             Value* dstPointsTo = *it->second.begin();
-            updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dstPointsTo, src);
+            updateDstPointsToWithSrcPointsTo(
+                    dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
         }
         // if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
         else {
             for (auto dstPointsTo : it->second)
-                updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dstPointsTo, src, false);
+                updateDstPointsToWithSrcPointsTo(
+                        dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src, false);
         }
+        /*
+        Diag << "############ [after] store #############\n";
+        if (DEBUG) SI->dump();
+        Diag << *dfval;
         */
     }
 
@@ -166,20 +185,24 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
+                /*
                 Diag << "############ [before] call-site #############\n";
                 if (DEBUG) CI->dump();
                 Diag << *dfval;
                 Diag << "---------------------------------------------\n";
                 Diag << (*result)[&F->getEntryBlock()].first;
+                */
                 if (updateDstPointsToWithSrcPointsTo(
                         (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
                         param, arg, false)) {
                     funcWorkList->insert(F);
+                    /*
                     Diag << "############ [after] call-site #############\n";
                     if (DEBUG) CI->dump();
                     Diag << (*result)[&F->getEntryBlock()].first;
                     Diag << "############ call-site #############\n\n";
+                    */
                 }
             }
         }
@@ -188,7 +211,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
    /*
     * return retval_f
     * call-site of f: {cs_i}
-    * cs_i->S(cs_i) \cup retval_f
+    * cs_i->S(cs_i) \cup S(retval_f)
      * add caller to function worklist if data flow changes
     */
     else if (ReturnInst* RI = dyn_cast<ReturnInst>(inst)) {
@@ -205,23 +228,37 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
     }
 
     /*
+     * field = getelementptr struct
+     * field->struct
+     */
+    else if (GetElementPtrInst* GEP = dyn_cast<GetElementPtrInst>(inst)) {
+        Value* src = GEP->getPointerOperand();
+        dfval->FuncPtrs[GEP] = ValueSet({src});
+    }
+
+    /*
+     * x = &y
+     * x->y
+     */
     else if (AllocaInst* AI = dyn_cast<AllocaInst>(inst)) {
         dfval->FuncPtrs[AI] = ValueSet({AI});
     }
-    */
 }
 
 
 bool FuncPtrPass::runOnModule(Module& M) {
     FuncSet workList;
-    for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
-        Function* F = &*i;
-        workList.insert(F);
-    }
-
     FuncPtrVisitor visitor;
     DataflowResult<FuncPtrInfo>::Type result;
     FuncPtrInfo initval;
+
+    for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
+        Function* F = &*i;
+        if (!F->isIntrinsic()) {
+            workList.insert(F);
+            initval.FuncPtrs[F] = ValueSet({F});
+        }
+    }
 
     int times = 0;
     while (!workList.empty()) {
