@@ -8,6 +8,23 @@
 #include "Dataflow.h"
 using namespace llvm;
 
+inline raw_ostream& operator<<(raw_ostream& out, const FuncPtrInfo& info) {
+    for (auto item : info.FuncPtrs) {
+        Value* key = item.first;
+        ValueSet& value = item.second;
+        key->dump();
+        out << ": {\n";
+        for (auto v : value) {
+            out << "\t";
+            if (v->hasName()) out << v->getName();
+            else v->dump();
+            out << ",\n";
+        }
+        out << "},\n";
+    }
+    return out;
+}
+
 void FuncPtrVisitor::merge(FuncPtrInfo *dest, const FuncPtrInfo &src) {
     for (auto item : src.FuncPtrs) {
         Value* key = item.first;
@@ -34,7 +51,7 @@ bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
     // if b->{}, a->b or a->S(a) \cup b
     if (it == srcFuncPtrMap.end()) {
         // if b->{}, a->b
-        if (strongUpdate || !CONTAINS(srcFuncPtrMap, dst)) {
+        if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
             ValueSet srcPointsTo = ValueSet({src});
             if (dstFuncPtrMap[dst] != srcPointsTo) {
                 dstFuncPtrMap[dst] = srcPointsTo;
@@ -47,7 +64,7 @@ bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
     // if b->S(b), a->S(b) or a->S(a) \cup S(b)
     else {
         // if b->S(b), a->S(b)
-        if (strongUpdate || !CONTAINS(srcFuncPtrMap, dst)) {
+        if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
             if (dstFuncPtrMap[dst] != it->second) {
                 dstFuncPtrMap[dst] = it->second;
                 changed = true;
@@ -149,11 +166,21 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
+                Diag << "############ [before] call-site #############\n";
+                if (DEBUG) CI->dump();
+                Diag << *dfval;
+                Diag << "---------------------------------------------\n";
+                Diag << (*result)[&F->getEntryBlock()].first;
                 if (updateDstPointsToWithSrcPointsTo(
                         (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
-                        param, arg, false))
+                        param, arg, false)) {
                     funcWorkList->insert(F);
+                    Diag << "############ [after] call-site #############\n";
+                    if (DEBUG) CI->dump();
+                    Diag << (*result)[&F->getEntryBlock()].first;
+                    Diag << "############ call-site #############\n\n";
+                }
             }
         }
     }
@@ -184,21 +211,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
     */
 }
 
-inline raw_ostream& operator<<(raw_ostream& out, const FuncPtrInfo& info) {
-    for (auto item : info.FuncPtrs) {
-        Value* key = item.first;
-        ValueSet& value = item.second;
-        key->dump();
-        out << ": {\n";
-        for (auto v : value) {
-            out << "\t";
-            v->dump();
-            out << ",\n";
-        }
-        out << "},\n";
-    }
-    return out;
-}
 
 bool FuncPtrPass::runOnModule(Module& M) {
     FuncSet workList;
