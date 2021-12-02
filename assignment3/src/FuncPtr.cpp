@@ -3,6 +3,7 @@
 //
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Instructions.h>
+#include <llvm/IR/InstIterator.h>
 #include "utils.h"
 #include "FuncPtr.h"
 #include "Dataflow.h"
@@ -188,9 +189,13 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
     else if (CallInst* CI = dyn_cast<CallInst>(inst)) {
         getCallees(dfval->FuncPtrs, CI);
         const FuncSet& callees = CalleeMap[CI];
-        int argNum = CI->getNumArgOperands();
+        if (callees.empty()) return;
+
+        FuncPtrInfo out;
         for (auto F : callees) {
             if (F->getName() == "malloc") continue;
+            bool changed = false;
+            int argNum = CI->getNumArgOperands();
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
@@ -201,38 +206,46 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                 Diag << "---------------------------------------------\n";
                 Diag << (*result)[&F->getEntryBlock()].first;
                 */
-                if (updateDstPointsToWithSrcPointsTo(
-                        (*result)[&F->getEntryBlock()].first.FuncPtrs,
+                changed |= updateDstPointsToWithSrcPointsTo(
+                        // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
-                        param, arg, false)) {
-                    funcWorkList->insert(F);
+                        dfval->FuncPtrs,
+                        param, arg, false);
+                    // funcWorkList->insert(F);
                     /*
                     Diag << "############ [after] call-site #############\n";
                     if (DEBUG) CI->dump();
                     Diag << (*result)[&F->getEntryBlock()].first;
                     Diag << "############ call-site #############\n\n";
                     */
-                }
             }
+            if (!changed) continue;
+            FuncPtrInfo tmp = *dfval;
+            for (inst_iterator i = inst_begin(F), e = inst_end(F); i != e; ++i)
+                compDFVal(&*i, &tmp, funcWorkList, result);
+            merge(&out, tmp);
         }
+        if (!out.FuncPtrs.empty())
+            *dfval = out;
     }
 
-   /*
-    * return retval_f
-    * call-site of f: {cs_i}
-    * cs_i->S(cs_i) \cup S(retval_f)
-     * add caller to function worklist if data flow changes
-    */
+/*
+ * return retval_f
+ * call-site of f: {cs_i}
+ * cs_i->S(cs_i) \cup S(retval_f)
+  * add caller to function worklist if data flow changes
+ */
     else if (ReturnInst* RI = dyn_cast<ReturnInst>(inst)) {
         const CallSet& callers = CallerMap[RI->getParent()->getParent()];
         Value* src = RI->getReturnValue();
+        if (RI->getType()->isVoidTy()) return;
         for (auto callSite : callers) {
             Function* F = callSite->getParent()->getParent();
-            if (updateDstPointsToWithSrcPointsTo(
-                    (*result)[&F->getEntryBlock()].first.FuncPtrs,
+            updateDstPointsToWithSrcPointsTo(
+                    // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                     dfval->FuncPtrs,
-                    callSite, src, false))
-                funcWorkList->insert(F);
+                    dfval->FuncPtrs,
+                    callSite, src, false);
         }
     }
 
@@ -302,7 +315,7 @@ void FuncPtrPass::dumpCallees(const Call2FuncSetMap& CalleeMap) {
     }
 
     for (auto item : result) {
-        errs() << item.first << ": ";
+        errs() << item.first << " : ";
         FuncSet& funcSet = item.second;
         for (auto F : funcSet) {
             if (F != *funcSet.begin()) errs() << ", ";
