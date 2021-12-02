@@ -236,9 +236,10 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
   * add caller to function worklist if data flow changes
  */
     else if (ReturnInst* RI = dyn_cast<ReturnInst>(inst)) {
-        const CallSet& callers = CallerMap[RI->getParent()->getParent()];
+        Function* F = RI->getParent()->getParent();
+        const CallSet& callers = CallerMap[F];
         Value* src = RI->getReturnValue();
-        if (RI->getType()->isVoidTy()) return;
+        if (F->getReturnType()->isVoidTy()) return;
         for (auto callSite : callers) {
             Function* F = callSite->getParent()->getParent();
             updateDstPointsToWithSrcPointsTo(

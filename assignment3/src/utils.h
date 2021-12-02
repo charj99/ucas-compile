@@ -19,7 +19,7 @@ typedef std::map<llvm::Function*, CallSet> Func2CallSetMap;
 typedef std::map<int, FuncSet, std::less<int>> Int2FuncSetMap;
 typedef std::map<llvm::Value*, llvm::Value*> V2VMap;
 typedef std::vector<llvm::CallInst*> CallList;
-#define DEBUG 0
+#define DEBUG 1
 #define Diag if (DEBUG) llvm::errs()
 #define CONTAINS(container, key) \
     (container.find(key) != container.end())
