@@ -100,6 +100,7 @@ void compForwardDataflowInter(Function *fn,
         // TODO: init
         if (result->find(bb) == result->end())
             result->insert(std::make_pair(bb, std::make_pair(initval, initval)));
+        else Diag << "bb exist\n";
         worklist.insert(bb);
     }
 

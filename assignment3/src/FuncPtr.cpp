@@ -238,11 +238,11 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
 
     /*
      * field = getelementptr struct
-     * field->struct
+     * field->S(struct)
      */
     else if (GetElementPtrInst* GEP = dyn_cast<GetElementPtrInst>(inst)) {
         Value* src = GEP->getPointerOperand();
-        dfval->FuncPtrs[GEP] = ValueSet({src});
+        updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, GEP, src);
     }
 
     /*
@@ -250,7 +250,13 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * x->y
      */
     else if (AllocaInst* AI = dyn_cast<AllocaInst>(inst)) {
-        Constant* allocSite = ConstantInt::get(IntegerType::getInt32Ty(AI->getContext()), allocCount++);
+        Value* allocSite = NULL;
+        if (CONTAINS(AllocMap, AI))
+            allocSite = AllocMap[AI];
+        else {
+            allocSite = ConstantInt::get(IntegerType::getInt32Ty(AI->getContext()), allocCount++);
+            AllocMap[AI] = allocSite;
+        }
         dfval->FuncPtrs[AI] = ValueSet({allocSite});
     }
 }
@@ -264,10 +270,8 @@ bool FuncPtrPass::runOnModule(Module& M) {
 
     for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
         Function* F = &*i;
-        if (!F->isIntrinsic()) {
+        if (!F->isIntrinsic())
             workList.insert(F);
-            // initval.FuncPtrs[F] = ValueSet({F});
-        }
     }
 
     int times = 0;
