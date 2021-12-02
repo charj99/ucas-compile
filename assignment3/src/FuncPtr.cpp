@@ -48,9 +48,18 @@ bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
         Value *dst, Value *src, bool strongUpdate) {
     V2VSetMap::iterator it = srcFuncPtrMap.find(src);
     bool changed = false;
-    // if b->{}, do nothing
-    if (it == srcFuncPtrMap.end())
+    // if src->{}, dst->src
+    if (it == srcFuncPtrMap.end()) {
+        if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
+            ValueSet srcPointsTo = ValueSet({src});
+            if (dstFuncPtrMap[dst] != srcPointsTo) {
+                dstFuncPtrMap[dst] = srcPointsTo;
+                changed = true;
+            }
+        }
+        else changed |= dstFuncPtrMap[dst].insert(src).second;
         return changed;
+    }
 
     // strong update: if src->S(src), dst->S(src)
     if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
@@ -146,7 +155,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         */
         Value* src = SI->getValueOperand();
         Value* dst = SI->getPointerOperand();
-        // a->b // dfval->FuncPtrs[dst] = ValueSet({src});
 
         V2VSetMap::iterator it = dfval->FuncPtrs.find(dst);
         // if a->{}, do nothing
@@ -182,6 +190,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         const FuncSet& callees = CalleeMap[CI];
         int argNum = CI->getNumArgOperands();
         for (auto F : callees) {
+            if (F->getName() == "malloc") continue;
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
@@ -241,7 +250,8 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * x->y
      */
     else if (AllocaInst* AI = dyn_cast<AllocaInst>(inst)) {
-        dfval->FuncPtrs[AI] = ValueSet({AI});
+        Constant* allocSite = ConstantInt::get(IntegerType::getInt32Ty(AI->getContext()), allocCount++);
+        dfval->FuncPtrs[AI] = ValueSet({allocSite});
     }
 }
 
@@ -256,7 +266,7 @@ bool FuncPtrPass::runOnModule(Module& M) {
         Function* F = &*i;
         if (!F->isIntrinsic()) {
             workList.insert(F);
-            initval.FuncPtrs[F] = ValueSet({F});
+            // initval.FuncPtrs[F] = ValueSet({F});
         }
     }
 

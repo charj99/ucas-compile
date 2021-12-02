@@ -10,8 +10,8 @@
 
 struct FuncPtrInfo {
     V2VSetMap FuncPtrs;
-    FuncPtrInfo() : FuncPtrs() {}
 
+    // TODO:
     bool operator == (const FuncPtrInfo& info) const {
         if (info.FuncPtrs.size() != FuncPtrs.size())
             return false;
@@ -30,13 +30,14 @@ class FuncPtrVisitor : public DataflowVisitor<FuncPtrInfo> {
 private:
     Call2FuncSetMap CalleeMap;
     Func2CallSetMap CallerMap;
+    int allocCount;
     bool updateDstPointsToWithSrcPointsTo(
             V2VSetMap& dstFuncPtrMap, V2VSetMap& srcFuncPtrMap,
             llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
 public:
-    FuncPtrVisitor() : CalleeMap(), CallerMap() {}
+    FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0) {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
     void compDFVal(Instruction* inst, FuncPtrInfo* dfval,
                    FuncSet* funcWorkList, DataflowResult<FuncPtrInfo>::Type* result) override;
