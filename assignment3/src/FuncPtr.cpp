@@ -206,11 +206,14 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                 Diag << "---------------------------------------------\n";
                 Diag << (*result)[&F->getEntryBlock()].first;
                 */
+                /*
                 changed |= updateDstPointsToWithSrcPointsTo(
                         // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
                         dfval->FuncPtrs,
                         param, arg, false);
+                */
+                changed |= dfval->FuncPtrs[param].insert(arg).second;
                     // funcWorkList->insert(F);
                     /*
                     Diag << "############ [after] call-site #############\n";
