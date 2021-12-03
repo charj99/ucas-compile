@@ -111,6 +111,17 @@ void FuncPtrVisitor::getCallees(V2VSetMap& funcPtrMap, CallInst* CI) {
     }
 }
 
+void FuncPtrVisitor::mapAllocSite(Instruction* inst, FuncPtrInfo* dfval) {
+    Value* allocSite = NULL;
+    if (CONTAINS(AllocMap, inst))
+        allocSite = AllocMap[inst];
+    else {
+        allocSite = ConstantInt::get(IntegerType::getInt32Ty(inst->getContext()), allocCount++);
+        AllocMap[inst] = allocSite;
+    }
+    dfval->FuncPtrs[inst] = ValueSet({allocSite});
+}
+
 // TODO:
 void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                                DataflowVisitor<FuncPtrInfo>* visitor,
@@ -185,7 +196,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                         dfval->FuncPtrs,
                         dfval->FuncPtrs,
                         param, arg, false);
-
                 // changed |= dfval->FuncPtrs[param].insert(arg).second;
             }
             if (!changed) continue;
@@ -230,18 +240,23 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
     }
 
     /*
-     * x = &y
-     * x->y
+     * x->allocSite number
      */
     else if (AllocaInst* AI = dyn_cast<AllocaInst>(inst)) {
-        Value* allocSite = NULL;
-        if (CONTAINS(AllocMap, AI))
-            allocSite = AllocMap[AI];
-        else {
-            allocSite = ConstantInt::get(IntegerType::getInt32Ty(AI->getContext()), allocCount++);
-            AllocMap[AI] = allocSite;
-        }
-        dfval->FuncPtrs[AI] = ValueSet({allocSite});
+        mapAllocSite(AI, dfval);
+    }
+
+    /*
+     * %call = call @malloc
+     * %x = bitcast %call
+     * %x->allocSite number
+     *
+     */
+    else if (CastInst* castInst = dyn_cast<CastInst>(inst)) {
+        CallInst* callInst = dyn_cast<CallInst>(castInst->getOperand(0));
+        if (callInst && !callInst->isIndirectCall()
+        && callInst->getCalledFunction()->getName() == "malloc")
+            mapAllocSite(castInst, dfval);
     }
 }
 

@@ -1,0 +1,86 @@
+; ModuleID = 'test28.ll'
+source_filename = "test28.c"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 {
+entry:
+  %add = add nsw i32 %a, %b
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @minus(i32 %a, i32 %b) #0 {
+entry:
+  %sub = sub nsw i32 %a, %b
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i32 %a, i32 %b, i32 (i32, i32)** %a_fptr, i32 (i32, i32)** %b_fptr) #0 {
+entry:
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %b_fptr, align 8
+  %call = call i32 %0(i32 %a, i32 %b)
+  ret i32 %call
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @clever(i32 %a, i32 %b, i32 (i32, i32)** %a_fptr, i32 (i32, i32)** %b_fptr) #0 {
+entry:
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %a_fptr, align 8
+  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %b_fptr, align 8
+  store i32 (i32, i32)* %1, i32 (i32, i32)** %a_fptr, align 8
+  store i32 (i32, i32)* %0, i32 (i32, i32)** %b_fptr, align 8
+  %call = call i32 @foo(i32 %a, i32 %b, i32 (i32, i32)** %a_fptr, i32 (i32, i32)** %b_fptr)
+  ret i32 %call
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @moo(i8 signext %x, i32 %op1, i32 %op2) #0 {
+entry:
+  %call = call noalias i8* @malloc(i64 8) #2
+  %0 = bitcast i8* %call to i32 (i32, i32)**
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %0, align 8
+  %call1 = call noalias i8* @malloc(i64 8) #2
+  %1 = bitcast i8* %call1 to i32 (i32, i32)**
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %1, align 8
+  %call2 = call noalias i8* @malloc(i64 8) #2
+  %2 = bitcast i8* %call2 to i32 (i32, i32)**
+  %conv = sext i8 %x to i32
+  %cmp = icmp eq i32 %conv, 43
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  br label %if.end8
+
+if.else:                                          ; preds = %entry
+  %conv4 = sext i8 %x to i32
+  %cmp5 = icmp eq i32 %conv4, 45
+  br i1 %cmp5, label %if.then7, label %if.end
+
+if.then7:                                         ; preds = %if.else
+  br label %if.end
+
+if.end:                                           ; preds = %if.then7, %if.else
+  %t_fptr.0 = phi i32 (i32, i32)** [ %1, %if.then7 ], [ %2, %if.else ]
+  br label %if.end8
+
+if.end8:                                          ; preds = %if.end, %if.then
+  %t_fptr.1 = phi i32 (i32, i32)** [ %0, %if.then ], [ %t_fptr.0, %if.end ]
+  %call9 = call i32 @clever(i32 %op1, i32 %op2, i32 (i32, i32)** %0, i32 (i32, i32)** %t_fptr.1)
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+declare dso_local noalias i8* @malloc(i64) #1
+
+attributes #0 = { noinline nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 10.0.0 "}

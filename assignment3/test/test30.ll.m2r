@@ -1,0 +1,95 @@
+; ModuleID = 'test30.ll'
+source_filename = "test30.c"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%struct.fptr = type { i32 (i32, i32)* }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 {
+entry:
+  %add = add nsw i32 %a, %b
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @minus(i32 %a, i32 %b) #0 {
+entry:
+  %sub = sub nsw i32 %a, %b
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 (i32, i32)* @foo(i32 %a, i32 %b, %struct.fptr* %c_fptr, %struct.fptr* %d_fptr) #0 {
+entry:
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %c_fptr, i32 0, i32 0
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr, align 8
+  ret i32 (i32, i32)* %0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 (i32, i32)* @clever(i32 %a, i32 %b, %struct.fptr* %c_fptr, %struct.fptr* %d_fptr) #0 {
+entry:
+  %cmp = icmp sgt i32 %a, 0
+  br i1 %cmp, label %land.lhs.true, label %if.end
+
+land.lhs.true:                                    ; preds = %entry
+  %cmp1 = icmp slt i32 %b, 0
+  br i1 %cmp1, label %if.then, label %if.end
+
+if.then:                                          ; preds = %land.lhs.true
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %d_fptr, i32 0, i32 0
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr, align 8
+  br label %return
+
+if.end:                                           ; preds = %land.lhs.true, %entry
+  %p_fptr2 = getelementptr inbounds %struct.fptr, %struct.fptr* %c_fptr, i32 0, i32 0
+  %1 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr2, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %retval.0 = phi i32 (i32, i32)* [ %0, %if.then ], [ %1, %if.end ]
+  ret i32 (i32, i32)* %retval.0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @moo(i8 signext %x, i32 %op1, i32 %op2) #0 {
+entry:
+  %a_fptr = alloca %struct.fptr, align 8
+  %s_fptr = alloca %struct.fptr, align 8
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %p_fptr, align 8
+  %p_fptr1 = getelementptr inbounds %struct.fptr, %struct.fptr* %s_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %p_fptr1, align 8
+  %conv = sext i8 %x to i32
+  %cmp = icmp eq i32 %conv, 43
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  br label %if.end7
+
+if.else:                                          ; preds = %entry
+  %conv3 = sext i8 %x to i32
+  %cmp4 = icmp eq i32 %conv3, 45
+  br i1 %cmp4, label %if.then6, label %if.end
+
+if.then6:                                         ; preds = %if.else
+  br label %if.end
+
+if.end:                                           ; preds = %if.then6, %if.else
+  br label %if.end7
+
+if.end7:                                          ; preds = %if.end, %if.then
+  %goo_ptr.1 = phi i32 (i32, i32)* (i32, i32, %struct.fptr*, %struct.fptr*)* [ @foo, %if.then ], [ @clever, %if.end ]
+  %call = call i32 (i32, i32)* %goo_ptr.1(i32 %op1, i32 %op2, %struct.fptr* %a_fptr, %struct.fptr* %s_fptr)
+  %call8 = call i32 %call(i32 %op1, i32 %op2)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 10.0.0 "}

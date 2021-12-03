@@ -1,0 +1,80 @@
+; ModuleID = 'test09.ll'
+source_filename = "test09.c"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%struct.fptr = type { i32 (i32, i32)* }
+%struct.fsptr = type { %struct.fptr* }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 {
+entry:
+  %add = add nsw i32 %a, %b
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @minus(i32 %a, i32 %b) #0 {
+entry:
+  %sub = sub nsw i32 %a, %b
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(i32 %x) #0 {
+entry:
+  %a_fptr = alloca %struct.fptr, align 8
+  %s_fptr = alloca %struct.fsptr, align 8
+  %call = call noalias i8* @malloc(i64 8) #3
+  %0 = bitcast i8* %call to %struct.fsptr*
+  %sptr = getelementptr inbounds %struct.fsptr, %struct.fsptr* %s_fptr, i32 0, i32 0
+  store %struct.fptr* %a_fptr, %struct.fptr** %sptr, align 8
+  %1 = bitcast %struct.fsptr* %0 to i8*
+  %2 = bitcast %struct.fsptr* %s_fptr to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %1, i8* align 8 %2, i64 8, i1 false)
+  %cmp = icmp sgt i32 %x, 1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %p_fptr, align 8
+  %sptr1 = getelementptr inbounds %struct.fsptr, %struct.fsptr* %s_fptr, i32 0, i32 0
+  %3 = load %struct.fptr*, %struct.fptr** %sptr1, align 8
+  %p_fptr2 = getelementptr inbounds %struct.fptr, %struct.fptr* %3, i32 0, i32 0
+  %4 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr2, align 8
+  %call3 = call i32 %4(i32 1, i32 %x)
+  %p_fptr4 = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %p_fptr4, align 8
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  %sptr5 = getelementptr inbounds %struct.fsptr, %struct.fsptr* %0, i32 0, i32 0
+  %5 = load %struct.fptr*, %struct.fptr** %sptr5, align 8
+  %p_fptr6 = getelementptr inbounds %struct.fptr, %struct.fptr* %5, i32 0, i32 0
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %p_fptr6, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %x.addr.0 = phi i32 [ %call3, %if.then ], [ %x, %if.else ]
+  %p_fptr7 = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0
+  %6 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr7, align 8
+  %call8 = call i32 %6(i32 1, i32 %x.addr.0)
+  ret void
+}
+
+; Function Attrs: nounwind
+declare dso_local noalias i8* @malloc(i64) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* noalias nocapture writeonly, i8* noalias nocapture readonly, i64, i1 immarg) #2
+
+attributes #0 = { noinline nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 10.0.0 "}

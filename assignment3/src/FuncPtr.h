@@ -40,6 +40,7 @@ private:
             llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
+    void mapAllocSite(llvm::Instruction* inst, FuncPtrInfo* dfval);
 public:
     FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), ExitBlockMap() {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;

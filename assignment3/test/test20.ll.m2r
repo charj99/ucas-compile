@@ -1,0 +1,87 @@
+; ModuleID = 'test20.ll'
+source_filename = "test20.c"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%struct.fptr = type { i32 (i32, i32)* }
+%struct.fsptr = type { %struct.fptr* }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @plus(i32 %a, i32 %b) #0 {
+entry:
+  %add = add nsw i32 %a, %b
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @minus(i32 %a, i32 %b) #0 {
+entry:
+  %sub = sub nsw i32 %a, %b
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local %struct.fptr* @foo(i32 %a, i32 %b, %struct.fsptr* %a_fptr, %struct.fsptr* %b_fptr) #0 {
+entry:
+  %sptr = getelementptr inbounds %struct.fsptr, %struct.fsptr* %a_fptr, i32 0, i32 0
+  %0 = load %struct.fptr*, %struct.fptr** %sptr, align 8
+  ret %struct.fptr* %0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local %struct.fptr* @clever(i32 %a, i32 %b, %struct.fsptr* %a_fptr, %struct.fsptr* %b_fptr) #0 {
+entry:
+  %sptr = getelementptr inbounds %struct.fsptr, %struct.fsptr* %b_fptr, i32 0, i32 0
+  %0 = load %struct.fptr*, %struct.fptr** %sptr, align 8
+  ret %struct.fptr* %0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @moo(i8 signext %x, i32 %op1, i32 %op2) #0 {
+entry:
+  %a_fptr = alloca %struct.fptr, align 8
+  %s_fptr = alloca %struct.fptr, align 8
+  %m_fptr = alloca %struct.fsptr, align 8
+  %n_fptr = alloca %struct.fsptr, align 8
+  %p_fptr = getelementptr inbounds %struct.fptr, %struct.fptr* %a_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @plus, i32 (i32, i32)** %p_fptr, align 8
+  %p_fptr1 = getelementptr inbounds %struct.fptr, %struct.fptr* %s_fptr, i32 0, i32 0
+  store i32 (i32, i32)* @minus, i32 (i32, i32)** %p_fptr1, align 8
+  %sptr = getelementptr inbounds %struct.fsptr, %struct.fsptr* %m_fptr, i32 0, i32 0
+  store %struct.fptr* %a_fptr, %struct.fptr** %sptr, align 8
+  %sptr2 = getelementptr inbounds %struct.fsptr, %struct.fsptr* %n_fptr, i32 0, i32 0
+  store %struct.fptr* %s_fptr, %struct.fptr** %sptr2, align 8
+  %conv = sext i8 %x to i32
+  %cmp = icmp eq i32 %conv, 43
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  br label %if.end8
+
+if.else:                                          ; preds = %entry
+  %conv4 = sext i8 %x to i32
+  %cmp5 = icmp eq i32 %conv4, 45
+  br i1 %cmp5, label %if.then7, label %if.end
+
+if.then7:                                         ; preds = %if.else
+  br label %if.end
+
+if.end:                                           ; preds = %if.then7, %if.else
+  br label %if.end8
+
+if.end8:                                          ; preds = %if.end, %if.then
+  %goo_ptr.1 = phi %struct.fptr* (i32, i32, %struct.fsptr*, %struct.fsptr*)* [ @foo, %if.then ], [ @clever, %if.end ]
+  %call = call %struct.fptr* %goo_ptr.1(i32 %op1, i32 %op2, %struct.fsptr* %m_fptr, %struct.fsptr* %n_fptr)
+  %p_fptr9 = getelementptr inbounds %struct.fptr, %struct.fptr* %call, i32 0, i32 0
+  %0 = load i32 (i32, i32)*, i32 (i32, i32)** %p_fptr9, align 8
+  %call10 = call i32 %0(i32 %op1, i32 %op2)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="all" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 10.0.0 "}
