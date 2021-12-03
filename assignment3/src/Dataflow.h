@@ -40,19 +40,20 @@ public:
     /// @isforward true to compute dfval forward, otherwise backward
     /// @funcWorkList the inter-procedural worklist
     virtual void compDFVal(BasicBlock *block, T *dfval, bool isforward,
-                           FuncSet* funcWorkList = NULL,
-                           typename DataflowResult<T>::Type *result = NULL) {
+                           DataflowVisitor<T>* visitor = NULL,
+                           typename DataflowResult<T>::Type *result = NULL,
+                           const T& initval = T()) {
         if (isforward == true) {
            for (BasicBlock::iterator ii=block->begin(), ie=block->end(); 
                 ii!=ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, funcWorkList, result);
+                compDFVal(inst, dfval, visitor, result, initval);
            }
         } else {
            for (BasicBlock::reverse_iterator ii=block->rbegin(), ie=block->rend();
                 ii != ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, funcWorkList, result);
+                compDFVal(inst, dfval, visitor, result, initval);
            }
         }
     }
@@ -64,8 +65,8 @@ public:
     /// @dfval the input dataflow value
     /// @funcWorkList the inter-procedural worklist
     /// @return true if dfval changed
-    virtual void compDFVal(Instruction *inst, T *dfval, FuncSet* funcWorkList,
-                           typename DataflowResult<T>::Type *result) = 0;
+    virtual void compDFVal(Instruction *inst, T *dfval, DataflowVisitor<T>* visitor,
+                           typename DataflowResult<T>::Type *result, const T& initval) = 0;
 
     ///
     /// Merge of two dfvals, dest will be ther merged result
@@ -89,8 +90,7 @@ template<class T>
 void compForwardDataflowInter(Function *fn,
                               DataflowVisitor<T> *visitor,
                               typename DataflowResult<T>::Type *result,
-                              const T & initval,
-                              FuncSet* funcWorkList) {
+                              const T & initval) {
 
     std::set<BasicBlock *> worklist;
 
@@ -100,7 +100,6 @@ void compForwardDataflowInter(Function *fn,
         // TODO: init
         if (result->find(bb) == result->end())
             result->insert(std::make_pair(bb, std::make_pair(initval, initval)));
-        else Diag << "bb exist\n";
         worklist.insert(bb);
     }
 
@@ -118,7 +117,7 @@ void compForwardDataflowInter(Function *fn,
         }
 
         (*result)[bb].first = bbEntryVal;
-        visitor->compDFVal(bb, &bbEntryVal, true, funcWorkList, result);
+        visitor->compDFVal(bb, &bbEntryVal, true, visitor, result, initval);
 
         // If outgoing value changed, propagate it along the CFG
         if (bbEntryVal == (*result)[bb].second) continue;

@@ -113,8 +113,9 @@ void FuncPtrVisitor::getCallees(V2VSetMap& funcPtrMap, CallInst* CI) {
 
 // TODO:
 void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
-                               FuncSet *funcWorkList,
-                               DataflowResult<FuncPtrInfo>::Type* result) {
+                               DataflowVisitor<FuncPtrInfo>* visitor,
+                               DataflowResult<FuncPtrInfo>::Type* result,
+                               const FuncPtrInfo& initval) {
     Diag << "################## pointer before #################\n";
     if (DEBUG) inst->dump();
     Diag << *dfval;
@@ -123,11 +124,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * if b->S(b), a->S(S(b))
      */
     if (LoadInst* LI = dyn_cast<LoadInst>(inst)) {
-        /*
-        Diag << "############ [before] load #############\n";
-        if (DEBUG) LI->dump();
-        Diag << *dfval;
-        */
         Value* src = LI->getPointerOperand();
         V2VSetMap::iterator it = dfval->FuncPtrs.find(src);
         if (it == dfval->FuncPtrs.end()) return;
@@ -135,11 +131,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         for (auto v : valueSet)
             updateDstPointsToWithSrcPointsTo(
                     dfval->FuncPtrs, dfval->FuncPtrs, LI, v, false);
-        /*
-        Diag << "############ [after] load #############\n";
-        if (DEBUG) LI->dump();
-        Diag << *dfval;
-        */
     }
 
     /*
@@ -149,11 +140,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
      */
     else if (StoreInst* SI = dyn_cast<StoreInst>(inst)) {
-        /*
-        Diag << "############ [before] store #############\n";
-        if (DEBUG) SI->dump();
-        Diag << *dfval;
-        */
         Value* src = SI->getValueOperand();
         Value* dst = SI->getPointerOperand();
 
@@ -173,11 +159,6 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                 updateDstPointsToWithSrcPointsTo(
                         dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src, false);
         }
-        /*
-        Diag << "############ [after] store #############\n";
-        if (DEBUG) SI->dump();
-        Diag << *dfval;
-        */
     }
 
     /*
@@ -199,52 +180,38 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
-                /*
-                Diag << "############ [before] call-site #############\n";
-                if (DEBUG) CI->dump();
-                Diag << *dfval;
-                Diag << "---------------------------------------------\n";
-                Diag << (*result)[&F->getEntryBlock()].first;
-                */
-                /*
                 changed |= updateDstPointsToWithSrcPointsTo(
                         // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
                         dfval->FuncPtrs,
                         param, arg, false);
-                */
-                changed |= dfval->FuncPtrs[param].insert(arg).second;
-                    // funcWorkList->insert(F);
-                    /*
-                    Diag << "############ [after] call-site #############\n";
-                    if (DEBUG) CI->dump();
-                    Diag << (*result)[&F->getEntryBlock()].first;
-                    Diag << "############ call-site #############\n\n";
-                    */
+
+                // changed |= dfval->FuncPtrs[param].insert(arg).second;
             }
             if (!changed) continue;
-            FuncPtrInfo tmp = *dfval;
-            for (inst_iterator i = inst_begin(F), e = inst_end(F); i != e; ++i)
-                compDFVal(&*i, &tmp, funcWorkList, result);
-            merge(&out, tmp);
+            merge(&(*result)[&F->getEntryBlock()].first, *dfval);
+            compForwardDataflowInter(F, visitor, result, initval);
+            Diag << "returned from " << F->getName() << "\n";
+            BasicBlock* exitBlock = ExitBlockMap[F];
+            merge(&out, (*result)[exitBlock].second);
+            Diag << "merge result\n";
         }
         if (!out.FuncPtrs.empty())
             *dfval = out;
     }
 
-/*
- * return retval_f
- * call-site of f: {cs_i}
- * cs_i->S(cs_i) \cup S(retval_f)
-  * add caller to function worklist if data flow changes
- */
+    /*
+    * return retval_f
+    * call-site of f: {cs_i}
+    * cs_i->S(cs_i) \cup S(retval_f)
+    * add caller to function worklist if data flow changes
+    */
     else if (ReturnInst* RI = dyn_cast<ReturnInst>(inst)) {
         Function* F = RI->getParent()->getParent();
         const CallSet& callers = CallerMap[F];
         Value* src = RI->getReturnValue();
         if (F->getReturnType()->isVoidTy()) return;
         for (auto callSite : callers) {
-            Function* F = callSite->getParent()->getParent();
             updateDstPointsToWithSrcPointsTo(
                     // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                     dfval->FuncPtrs,
@@ -289,6 +256,10 @@ bool FuncPtrPass::runOnModule(Module& M) {
         Function* F = &*i;
         if (!F->isIntrinsic())
             workList.insert(F);
+        for (Function::iterator bi = F->begin(), be = F->end(); bi != be; ++bi) {
+            BasicBlock* bb = &*bi;
+            if (succ_empty(bb)) visitor.setExitBlock(F, bb);
+        }
     }
 
     int times = 0;
@@ -296,7 +267,7 @@ bool FuncPtrPass::runOnModule(Module& M) {
         Function* F = *workList.begin();
         workList.erase(F);
 
-        compForwardDataflowInter(F, &visitor, &result, initval, &workList);
+        compForwardDataflowInter(F, &visitor, &result, initval);
         Diag << ++times << ": " << F->getName() << "------------------------------\n";
         if (DEBUG) printDataflowResult<FuncPtrInfo>(errs(), result);
         Diag << "------------------------------\n";

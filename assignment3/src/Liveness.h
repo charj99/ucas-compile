@@ -52,8 +52,10 @@ public:
        }
    }
 
-   void compDFVal(Instruction *inst, LivenessInfo * dfval, FuncSet* funcWorkList,
-                  DataflowResult<LivenessInfo>::Type* result) override{
+   void compDFVal(Instruction *inst, LivenessInfo * dfval,
+                  DataflowVisitor<LivenessInfo>* visitor,
+                  DataflowResult<LivenessInfo>::Type* result,
+                  const LivenessInfo& initval) override{
         if (isa<DbgInfoIntrinsic>(inst)) return;
         dfval->LiveVars.erase(inst);
         for(User::op_iterator oi = inst->op_begin(), oe = inst->op_end();

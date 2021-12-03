@@ -18,7 +18,7 @@ typedef llvm::SmallPtrSet<llvm::CallInst*, 4> CallSet;
 typedef std::map<llvm::Function*, CallSet> Func2CallSetMap;
 typedef std::map<int, FuncSet, std::less<int>> Int2FuncSetMap;
 typedef std::map<llvm::Value*, llvm::Value*> V2VMap;
-typedef std::vector<llvm::CallInst*> CallList;
+typedef std::map<llvm::Function*, llvm::BasicBlock*> Func2BBMap;
 #define DEBUG 1
 #define Diag if (DEBUG) llvm::errs()
 #define CONTAINS(container, key) \

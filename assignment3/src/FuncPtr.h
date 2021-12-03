@@ -34,19 +34,25 @@ private:
     Func2CallSetMap CallerMap;
     int allocCount;
     V2VMap AllocMap;
-    CallList CallStack;
+    Func2BBMap ExitBlockMap;
     bool updateDstPointsToWithSrcPointsTo(
             V2VSetMap& dstFuncPtrMap, V2VSetMap& srcFuncPtrMap,
             llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
 public:
-    FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), CallStack() {}
+    FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), ExitBlockMap() {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
     void compDFVal(Instruction* inst, FuncPtrInfo* dfval,
-                   FuncSet* funcWorkList, DataflowResult<FuncPtrInfo>::Type* result) override;
+                   DataflowVisitor<FuncPtrInfo>* visitor,
+                   DataflowResult<FuncPtrInfo>::Type* result,
+                   const FuncPtrInfo& initval) override;
     const Call2FuncSetMap& getCalleeMap() {
         return CalleeMap;
+    }
+    void setExitBlock(llvm::Function* F, llvm::BasicBlock* bb) {
+        assert(ExitBlockMap.find(F) == ExitBlockMap.end());
+        ExitBlockMap[F] = bb;
     }
 };
 
