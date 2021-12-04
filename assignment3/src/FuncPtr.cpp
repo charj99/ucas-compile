@@ -111,15 +111,16 @@ void FuncPtrVisitor::getCallees(V2VSetMap& funcPtrMap, CallInst* CI) {
     }
 }
 
-void FuncPtrVisitor::mapAllocSite(Instruction* inst, FuncPtrInfo* dfval) {
+Value* FuncPtrVisitor::mapAllocSite(Value* v, FuncPtrInfo* dfval) {
     Value* allocSite = NULL;
-    if (CONTAINS(AllocMap, inst))
-        allocSite = AllocMap[inst];
+    if (CONTAINS(AllocMap, v))
+        allocSite = AllocMap[v];
     else {
-        allocSite = ConstantInt::get(IntegerType::getInt32Ty(inst->getContext()), allocCount++);
-        AllocMap[inst] = allocSite;
+        allocSite = ConstantInt::get(IntegerType::getInt32Ty(v->getContext()), allocCount++);
+        AllocMap[v] = allocSite;
     }
-    dfval->FuncPtrs[inst] = ValueSet({allocSite});
+    dfval->FuncPtrs[v] = ValueSet({allocSite});
+    return allocSite;
 }
 
 // TODO:
@@ -166,9 +167,13 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         }
         // if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
         else {
+            Value* dstPointsTo = mapAllocSite(dst, dfval);
+            updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
+            /*
             for (auto dstPointsTo : it->second)
                 updateDstPointsToWithSrcPointsTo(
                         dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src, false);
+            */
         }
     }
 
@@ -257,6 +262,15 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         if (callInst && !callInst->isIndirectCall()
         && callInst->getCalledFunction()->getName() == "malloc")
             mapAllocSite(castInst, dfval);
+    }
+
+    else if (PHINode* PHI = dyn_cast<PHINode>(inst)) {
+        int num = PHI->getNumIncomingValues();
+        for (int i = 0; i < num; i++) {
+            Value* src = PHI->getIncomingValue(i);
+            // dfval->FuncPtrs[PHI].insert(src);
+            updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, PHI, src, false);
+        }
     }
 }
 

@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
    }
 
    llvm::legacy::PassManager Passes;
-#if LLVM_VERSION_MAJOR == 5
+#if LLVM_VERSION_MAJOR >= 5
    Passes.add(new EnableFunctionOptPass());
 #endif
    ///Transform it to SSA
