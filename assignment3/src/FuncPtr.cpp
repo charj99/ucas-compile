@@ -4,6 +4,7 @@
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Instructions.h>
 #include <llvm/IR/InstIterator.h>
+#include <llvm/IR/IntrinsicInst.h>
 #include "utils.h"
 #include "FuncPtr.h"
 #include "Dataflow.h"
@@ -194,6 +195,24 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      * add callee to function worklist if data flow changes
      */
     else if (CallInst* CI = dyn_cast<CallInst>(inst)) {
+        if (MemCpyInst* MCI = dyn_cast<MemCpyInst>(CI)) {
+            Value* dst = MCI->getArgOperand(0);
+            Value* src = MCI->getArgOperand(1);
+            V2VSetMap::iterator it1 = dfval->FuncPtrs.find(dst);
+            V2VSetMap::iterator it2 = dfval->FuncPtrs.find(src);
+            if (it1 == dfval->FuncPtrs.end() || it2 == dfval->FuncPtrs.end()) return;
+            ValueSet& valueSet1 = it1->second;
+            ValueSet &valueSet2 = it2->second;
+            for (auto v1 : valueSet1) {
+                bool begin = true;
+                for (auto v2: valueSet2) {
+                    updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, v1, v2, begin);
+                    begin = false;
+                }
+            }
+            return;
+        }
+
         getCallees(dfval->FuncPtrs, CI);
         const FuncSet& callees = CalleeMap[CI];
         if (callees.empty()) return;
@@ -201,7 +220,10 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         FuncPtrInfo out;
         Diag << "Caller: " << CI->getParent()->getParent()->getName() << "\n";
         for (auto F : callees) {
-            if (F->getName() == "malloc") continue;
+            if (F->getName() == "malloc") {
+                mapAllocSite(CI, dfval);
+                continue;
+            }
             Diag << "Callee: " << F->getName() << "\n";
             bool changed = false;
             int argNum = CI->getNumArgOperands();
@@ -272,10 +294,14 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
      *
      */
     else if (CastInst* castInst = dyn_cast<CastInst>(inst)) {
+        /*
         CallInst* callInst = dyn_cast<CallInst>(castInst->getOperand(0));
         if (callInst && !callInst->isIndirectCall()
-        && callInst->getCalledFunction()->getName() == "malloc")
+            && callInst->getCalledFunction()->getName() == "malloc")
             mapAllocSite(castInst, dfval);
+        */
+        Value* src = castInst->getOperand(0);
+        updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, castInst, src);
     }
 
     else if (PHINode* PHI = dyn_cast<PHINode>(inst)) {
