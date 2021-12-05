@@ -51,6 +51,8 @@ bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
     bool changed = false;
     // if src->{}, dst->src
     if (it == srcFuncPtrMap.end()) {
+        return changed;
+        /*
         if (strongUpdate || !CONTAINS(dstFuncPtrMap, dst)) {
             ValueSet srcPointsTo = ValueSet({src});
             if (dstFuncPtrMap[dst] != srcPointsTo) {
@@ -60,6 +62,7 @@ bool FuncPtrVisitor::updateDstPointsToWithSrcPointsTo(
         }
         else changed |= dstFuncPtrMap[dst].insert(src).second;
         return changed;
+        */
     }
 
     // strong update: if src->S(src), dst->S(src)
@@ -168,6 +171,13 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         // if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
         else {
             Value* dstPointsTo = mapAllocSite(dst, dfval);
+            /*
+            ValueSet dstPointsToSet = ValueSet({dstPointsTo});
+            for (auto item : dfval->FuncPtrs) {
+                if (item.second == it->second)
+                    item.second = dstPointsToSet;
+            }
+            */
             updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
             /*
             for (auto dstPointsTo : it->second)
@@ -189,8 +199,10 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         if (callees.empty()) return;
 
         FuncPtrInfo out;
+        Diag << "Caller: " << CI->getParent()->getParent()->getName() << "\n";
         for (auto F : callees) {
             if (F->getName() == "malloc") continue;
+            Diag << "Callee: " << F->getName() << "\n";
             bool changed = false;
             int argNum = CI->getNumArgOperands();
             for (int i = 0; i < argNum; i++) {
@@ -204,7 +216,9 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                 // changed |= dfval->FuncPtrs[param].insert(arg).second;
             }
             if (!changed) continue;
+
             merge(&(*result)[&F->getEntryBlock()].first, *dfval);
+            // (*result)[&F->getEntryBlock()].first = *dfval;
             compForwardDataflowInter(F, visitor, result, initval);
             Diag << "returned from " << F->getName() << "\n";
             BasicBlock* exitBlock = ExitBlockMap[F];
@@ -283,8 +297,10 @@ bool FuncPtrPass::runOnModule(Module& M) {
 
     for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
         Function* F = &*i;
-        if (!F->isIntrinsic())
+        if (!F->isIntrinsic()) {
             workList.insert(F);
+            initval.FuncPtrs[F] = ValueSet({F});
+        }
         for (Function::iterator bi = F->begin(), be = F->end(); bi != be; ++bi) {
             BasicBlock* bb = &*bi;
             if (succ_empty(bb)) visitor.setExitBlock(F, bb);
