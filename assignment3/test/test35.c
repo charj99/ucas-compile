@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 struct fptr
 {
 int (*p_fptr)(int, int);
@@ -12,10 +13,12 @@ struct wfsptr
   struct fsptr * wfptr;
 };
 int plus(int a, int b) {
+    printf("calling plus\n");
    return a+b;
 }
 
 int minus(int a, int b) {
+    printf("calling minus\n");
    return a-b;
 }
 void make_simple_alias(struct wfsptr * a_fptr,struct fsptr * b_fptr)
@@ -83,6 +86,10 @@ int moo(char x, int op1, int op2) {
     return 0;
 }
 
+int main() {
+	moo(0, 0, 0);
+	return 0;
+}
 // 39 : swap_w
 // 40 : plus,minus
 // 49 : make_simple_alias

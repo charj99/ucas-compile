@@ -127,6 +127,13 @@ Value* FuncPtrVisitor::mapAllocSite(Value* v, FuncPtrInfo* dfval) {
     return allocSite;
 }
 
+void FuncPtrVisitor::clearDFVal(
+        Function* F, DataflowResult<FuncPtrInfo>::Type* result, const FuncPtrInfo& initval) {
+    for (Function::iterator bi = F->begin(); bi != F->end(); ++bi) {
+        BasicBlock * bb = &*bi;
+        (*result)[bb] = std::make_pair(initval, initval);
+    }
+}
 // TODO:
 void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                                DataflowVisitor<FuncPtrInfo>* visitor,
@@ -225,22 +232,26 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                 continue;
             }
             Diag << "Callee: " << F->getName() << "\n";
-            bool changed = false;
+            // bool changed = false;
             int argNum = CI->getNumArgOperands();
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
                 Value* param = F->getArg(i);
-                changed |= updateDstPointsToWithSrcPointsTo(
+                updateDstPointsToWithSrcPointsTo(
                         // (*result)[&F->getEntryBlock()].first.FuncPtrs,
                         dfval->FuncPtrs,
                         dfval->FuncPtrs,
-                        param, arg, false);
+                        param, arg);
                 // changed |= dfval->FuncPtrs[param].insert(arg).second;
             }
-            if (!changed) continue;
+            // if (!changed) continue;
 
+            /*
             merge(&(*result)[&F->getEntryBlock()].first, *dfval);
-            // (*result)[&F->getEntryBlock()].first = *dfval;
+            */
+
+            clearDFVal(F, result, initval);
+            (*result)[&F->getEntryBlock()].first = *dfval;
             compForwardDataflowInter(F, visitor, result, initval);
             Diag << "returned from " << F->getName() << "\n";
             BasicBlock* exitBlock = ExitBlockMap[F];

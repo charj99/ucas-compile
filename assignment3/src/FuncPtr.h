@@ -41,6 +41,9 @@ private:
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
     Value* mapAllocSite(llvm::Value* v, FuncPtrInfo* dfval);
+    void clearDFVal(llvm::Function* F,
+                    DataflowResult<FuncPtrInfo>::Type* result,
+                    const FuncPtrInfo& initval);
 public:
     FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), ExitBlockMap() {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
