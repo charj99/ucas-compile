@@ -178,20 +178,19 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         }
         // if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
         else {
-            Value* dstPointsTo = mapAllocSite(dst, dfval);
+            // Value* dstPointsTo = mapAllocSite(dst, dfval);
+            // ValueSet dstPointsToSet = ValueSet({dstPointsTo});
             /*
-            ValueSet dstPointsToSet = ValueSet({dstPointsTo});
             for (auto item : dfval->FuncPtrs) {
                 if (item.second == it->second)
                     item.second = dstPointsToSet;
             }
             */
-            updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
-            /*
+            // updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
+
             for (auto dstPointsTo : it->second)
                 updateDstPointsToWithSrcPointsTo(
                         dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src, false);
-            */
         }
     }
 
@@ -246,12 +245,12 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             }
             // if (!changed) continue;
 
-            /*
             merge(&(*result)[&F->getEntryBlock()].first, *dfval);
-            */
 
+            /*
             clearDFVal(F, result, initval);
             (*result)[&F->getEntryBlock()].first = *dfval;
+            */
             compForwardDataflowInter(F, visitor, result, initval);
             Diag << "returned from " << F->getName() << "\n";
             BasicBlock* exitBlock = ExitBlockMap[F];
