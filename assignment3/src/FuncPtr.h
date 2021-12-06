@@ -30,8 +30,6 @@ struct FuncPtrInfo {
 
 class FuncPtrVisitor : public DataflowVisitor<FuncPtrInfo> {
 private:
-    Call2FuncSetMap CalleeMap;
-    Func2CallSetMap CallerMap;
     int allocCount;
     V2VMap AllocMap;
     Func2BBMap ExitBlockMap;
@@ -45,15 +43,13 @@ private:
                     DataflowResult<FuncPtrInfo>::Type* result,
                     const FuncPtrInfo& initval);
 public:
-    FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), ExitBlockMap() {}
-    void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
+    FuncPtrVisitor() : allocCount(0), AllocMap(), ExitBlockMap() {}
+    bool merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
     void compDFVal(Instruction* inst, FuncPtrInfo* dfval,
                    DataflowVisitor<FuncPtrInfo>* visitor,
                    DataflowResult<FuncPtrInfo>::Type* result,
-                   const FuncPtrInfo& initval) override;
-    const Call2FuncSetMap& getCalleeMap() {
-        return CalleeMap;
-    }
+                   const FuncPtrInfo& initval,
+                   FuncSet* funcWorkList) override;
     void setExitBlock(llvm::Function* F, llvm::BasicBlock* bb) {
         assert(ExitBlockMap.find(F) == ExitBlockMap.end());
         ExitBlockMap[F] = bb;

@@ -30,6 +30,9 @@ struct DataflowResult {
 ///Base dataflow visitor class, defines the dataflow function
 template <class T>
 class DataflowVisitor {
+protected: // can be used in subclass
+    Call2FuncSetMap CalleeMap;
+    Func2CallSetMap CallerMap;
 public:
     virtual ~DataflowVisitor() { }
 
@@ -42,18 +45,19 @@ public:
     virtual void compDFVal(BasicBlock *block, T *dfval, bool isforward,
                            DataflowVisitor<T>* visitor = NULL,
                            typename DataflowResult<T>::Type *result = NULL,
-                           const T& initval = T()) {
+                           const T& initval = T(),
+                           FuncSet* funcWorkList = NULL) {
         if (isforward == true) {
            for (BasicBlock::iterator ii=block->begin(), ie=block->end(); 
                 ii!=ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, visitor, result, initval);
+                compDFVal(inst, dfval, visitor, result, initval, funcWorkList);
            }
         } else {
            for (BasicBlock::reverse_iterator ii=block->rbegin(), ie=block->rend();
                 ii != ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, visitor, result, initval);
+                compDFVal(inst, dfval, visitor, result, initval, funcWorkList);
            }
         }
     }
@@ -66,13 +70,22 @@ public:
     /// @funcWorkList the inter-procedural worklist
     /// @return true if dfval changed
     virtual void compDFVal(Instruction *inst, T *dfval, DataflowVisitor<T>* visitor,
-                           typename DataflowResult<T>::Type *result, const T& initval) = 0;
+                           typename DataflowResult<T>::Type *result, const T& initval,
+                           FuncSet* funcWorkList) = 0;
 
     ///
     /// Merge of two dfvals, dest will be ther merged result
     /// @return true if dest changed
     ///
-    virtual void merge( T *dest, const T &src ) = 0;
+    virtual bool merge( T *dest, const T &src ) = 0;
+
+    const Call2FuncSetMap& getCalleeMap() {
+        return CalleeMap;
+    }
+
+    const Func2CallSetMap& getCallerMap() {
+        return CallerMap;
+    }
 };
 
 
@@ -90,7 +103,7 @@ template<class T>
 void compForwardDataflowInter(Function *fn,
                               DataflowVisitor<T> *visitor,
                               typename DataflowResult<T>::Type *result,
-                              const T & initval) {
+                              const T & initval, FuncSet* funcWorkList) {
 
     std::set<BasicBlock *> worklist;
 
@@ -117,7 +130,7 @@ void compForwardDataflowInter(Function *fn,
         }
 
         (*result)[bb].first = bbEntryVal;
-        visitor->compDFVal(bb, &bbEntryVal, true, visitor, result, initval);
+        visitor->compDFVal(bb, &bbEntryVal, true, visitor, result, initval, funcWorkList);
 
         // If outgoing value changed, propagate it along the CFG
         if (bbEntryVal == (*result)[bb].second) continue;
@@ -125,6 +138,16 @@ void compForwardDataflowInter(Function *fn,
 
         for (succ_iterator si = succ_begin(bb), se = succ_end(bb); si != se; si++) {
             worklist.insert(*si);
+        }
+
+        if (!succ_size(bb)) {
+            Function* callee = bb->getParent();
+            const Func2CallSetMap& callerMap = visitor->getCallerMap();
+            Func2CallSetMap::const_iterator it = callerMap.find(callee);
+            if (it == callerMap.end()) continue;
+            const CallSet& callSet = it->second;
+            for (auto CI : callSet)
+                funcWorkList->insert(CI->getParent()->getParent());
         }
     }
 }

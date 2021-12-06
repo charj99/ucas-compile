@@ -45,17 +45,20 @@ inline raw_ostream &operator<<(raw_ostream &out, const LivenessInfo &info) {
 class LivenessVisitor : public DataflowVisitor<struct LivenessInfo> {
 public:
    LivenessVisitor() {}
-   void merge(LivenessInfo * dest, const LivenessInfo & src) override {
-       for (std::set<Instruction *>::const_iterator ii = src.LiveVars.begin(), 
+   bool merge(LivenessInfo * dest, const LivenessInfo & src) override {
+       bool changed = false;
+       for (std::set<Instruction *>::const_iterator ii = src.LiveVars.begin(),
             ie = src.LiveVars.end(); ii != ie; ++ii) {
-           dest->LiveVars.insert(*ii);
+           changed |= dest->LiveVars.insert(*ii).second;
        }
+       return changed;
    }
 
    void compDFVal(Instruction *inst, LivenessInfo * dfval,
                   DataflowVisitor<LivenessInfo>* visitor,
                   DataflowResult<LivenessInfo>::Type* result,
-                  const LivenessInfo& initval) override{
+                  const LivenessInfo& initval,
+                  FuncSet* funcWorkList) override{
         if (isa<DbgInfoIntrinsic>(inst)) return;
         dfval->LiveVars.erase(inst);
         for(User::op_iterator oi = inst->op_begin(), oe = inst->op_end();

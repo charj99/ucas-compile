@@ -28,17 +28,21 @@ inline raw_ostream& operator<<(raw_ostream& out, const FuncPtrInfo& info) {
     return out;
 }
 
-void FuncPtrVisitor::merge(FuncPtrInfo *dest, const FuncPtrInfo &src) {
+bool FuncPtrVisitor::merge(FuncPtrInfo *dest, const FuncPtrInfo &src) {
+    bool changed = false;
     for (auto item : src.FuncPtrs) {
         Value* key = item.first;
         ValueSet& value = item.second;
         V2VSetMap::iterator it = dest->FuncPtrs.find(key);
         if (it == dest->FuncPtrs.end()) {
             dest->FuncPtrs[key] = value;
+            changed = true;
         } else {
-            it->second.insert(value.begin(), value.end());
+            for (auto v : value)
+                changed |= it->second.insert(v).second;
         }
     }
+    return changed;
 }
 
 /*
@@ -138,7 +142,8 @@ void FuncPtrVisitor::clearDFVal(
 void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                                DataflowVisitor<FuncPtrInfo>* visitor,
                                DataflowResult<FuncPtrInfo>::Type* result,
-                               const FuncPtrInfo& initval) {
+                               const FuncPtrInfo& initval,
+                               FuncSet* funcWorkList) {
     Diag << "################## pointer before #################\n";
     if (DEBUG) inst->dump();
     Diag << *dfval;
@@ -225,14 +230,14 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         if (callees.empty()) return;
 
         FuncPtrInfo out;
-        Diag << "Caller: " << CI->getParent()->getParent()->getName() << "\n";
+        Function* caller = CI->getParent()->getParent();
+        Diag << "Caller: " << caller << "\n";
         for (auto F : callees) {
             if (F->getName() == "malloc") {
                 mapAllocSite(CI, dfval);
                 continue;
             }
             Diag << "Callee: " << F->getName() << "\n";
-            // bool changed = false;
             int argNum = CI->getNumArgOperands();
             for (int i = 0; i < argNum; i++) {
                 Value* arg = CI->getArgOperand(i);
@@ -242,21 +247,14 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                         dfval->FuncPtrs,
                         dfval->FuncPtrs,
                         param, arg);
-                // changed |= dfval->FuncPtrs[param].insert(arg).second;
             }
-            // if (!changed) continue;
 
-            /*
-            merge(&(*result)[&F->getEntryBlock()].first, *dfval);
-            */
-
-            clearDFVal(F, result, initval);
-            (*result)[&F->getEntryBlock()].first = *dfval;
-            compForwardDataflowInter(F, visitor, result, initval);
-            Diag << "returned from " << F->getName() << "\n";
+            if (merge(&(*result)[&F->getEntryBlock()].first, *dfval)) {
+                funcWorkList->insert(F);
+                // funcWorkList->insert(caller);
+            }
             BasicBlock* exitBlock = ExitBlockMap[F];
             merge(&out, (*result)[exitBlock].second);
-            Diag << "merge result\n";
         }
         if (!out.FuncPtrs.empty())
             *dfval = out;
@@ -349,7 +347,7 @@ bool FuncPtrPass::runOnModule(Module& M) {
         Function* F = *workList.begin();
         workList.erase(F);
 
-        compForwardDataflowInter(F, &visitor, &result, initval);
+        compForwardDataflowInter(F, &visitor, &result, initval, &workList);
         Diag << ++times << ": " << F->getName() << "------------------------------\n";
         if (DEBUG) printDataflowResult<FuncPtrInfo>(errs(), result);
         Diag << "------------------------------\n";
