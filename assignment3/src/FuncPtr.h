@@ -36,14 +36,10 @@ private:
     V2VMap AllocMap;
     Func2BBMap ExitBlockMap;
     bool updateDstPointsToWithSrcPointsTo(
-            V2VSetMap& dstFuncPtrMap, V2VSetMap& srcFuncPtrMap,
-            llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
+            V2VSetMap& funcPtrMap, llvm::Value* dst, llvm::Value* src, bool strongUpdate = true);
     void getCallees(V2VSetMap& funcPtrMap, llvm::CallInst* CI);
     void linkCallSiteAndCallee(llvm::CallInst* CI, llvm::Function* callee);
     Value* mapAllocSite(llvm::Value* v, FuncPtrInfo* dfval);
-    void clearDFVal(llvm::Function* F,
-                    DataflowResult<FuncPtrInfo>::Type* result,
-                    const FuncPtrInfo& initval);
 public:
     FuncPtrVisitor() : CalleeMap(), CallerMap(), allocCount(0), AllocMap(), ExitBlockMap() {}
     void merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
@@ -58,6 +54,17 @@ public:
         assert(ExitBlockMap.find(F) == ExitBlockMap.end());
         ExitBlockMap[F] = bb;
     }
+    void processLoadInst(LoadInst* LI, FuncPtrInfo* dfval);
+    void processStoreInst(StoreInst* LI, FuncPtrInfo* dfval);
+    void processCallInst(CallInst* CI, FuncPtrInfo* dfval,
+                         DataflowVisitor<FuncPtrInfo>* visitor,
+                         DataflowResult<FuncPtrInfo>::Type* result,
+                         const FuncPtrInfo& initval);
+    void processReturnInst(ReturnInst* RI, FuncPtrInfo* dfval);
+    void processGetElementPtrInst(GetElementPtrInst* GEP, FuncPtrInfo* dfval);
+    void processAllocaInst(AllocaInst* AI, FuncPtrInfo* dfval);
+    void processCastInst(CastInst* castInst, FuncPtrInfo* dfval);
+    void processPHINode(PHINode* PHI, FuncPtrInfo* dfval);
 };
 
 ///!TODO TO BE COMPLETED BY YOU FOR ASSIGNMENT 3
