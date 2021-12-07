@@ -42,7 +42,7 @@ public:
     /// @dfval the input dataflow value
     /// @isforward true to compute dfval forward, otherwise backward
     /// @funcWorkList the inter-procedural worklist
-    virtual void compDFVal(BasicBlock *block, T *dfval, bool isforward,
+    virtual bool compDFVal(BasicBlock *block, T *dfval, bool isforward,
                            DataflowVisitor<T>* visitor = NULL,
                            typename DataflowResult<T>::Type *result = NULL,
                            const T& initval = T(),
@@ -51,15 +51,18 @@ public:
            for (BasicBlock::iterator ii=block->begin(), ie=block->end(); 
                 ii!=ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, visitor, result, initval, funcWorkList);
+                if (compDFVal(inst, dfval, visitor, result, initval, funcWorkList))
+                    return true;
            }
         } else {
            for (BasicBlock::reverse_iterator ii=block->rbegin(), ie=block->rend();
                 ii != ie; ++ii) {
                 Instruction * inst = &*ii;
-                compDFVal(inst, dfval, visitor, result, initval, funcWorkList);
+                if (compDFVal(inst, dfval, visitor, result, initval, funcWorkList))
+                    return true;
            }
         }
+        return false;
     }
 
     ///
@@ -69,7 +72,7 @@ public:
     /// @dfval the input dataflow value
     /// @funcWorkList the inter-procedural worklist
     /// @return true if dfval changed
-    virtual void compDFVal(Instruction *inst, T *dfval, DataflowVisitor<T>* visitor,
+    virtual bool compDFVal(Instruction *inst, T *dfval, DataflowVisitor<T>* visitor,
                            typename DataflowResult<T>::Type *result, const T& initval,
                            FuncSet* funcWorkList) = 0;
 
@@ -130,7 +133,8 @@ void compForwardDataflowInter(Function *fn,
         }
 
         (*result)[bb].first = bbEntryVal;
-        visitor->compDFVal(bb, &bbEntryVal, true, visitor, result, initval, funcWorkList);
+        if (visitor->compDFVal(bb, &bbEntryVal, true, visitor, result, initval, funcWorkList))
+            return;
 
         // If outgoing value changed, propagate it along the CFG
         if (bbEntryVal == (*result)[bb].second) continue;
@@ -140,6 +144,7 @@ void compForwardDataflowInter(Function *fn,
             worklist.insert(*si);
         }
 
+        /*
         if (!succ_size(bb)) {
             Function* callee = bb->getParent();
             const Func2CallSetMap& callerMap = visitor->getCallerMap();
@@ -149,6 +154,7 @@ void compForwardDataflowInter(Function *fn,
             for (auto CI : callSet)
                 funcWorkList->insert(CI->getParent()->getParent());
         }
+        */
     }
 }
 /// 

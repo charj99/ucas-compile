@@ -139,7 +139,7 @@ void FuncPtrVisitor::clearDFVal(
     }
 }
 // TODO:
-void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
+bool FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                                DataflowVisitor<FuncPtrInfo>* visitor,
                                DataflowResult<FuncPtrInfo>::Type* result,
                                const FuncPtrInfo& initval,
@@ -154,7 +154,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
     if (LoadInst* LI = dyn_cast<LoadInst>(inst)) {
         Value* src = LI->getPointerOperand();
         V2VSetMap::iterator it = dfval->FuncPtrs.find(src);
-        if (it == dfval->FuncPtrs.end()) return;
+        if (it == dfval->FuncPtrs.end()) return false;
         ValueSet& valueSet = it->second;
         for (auto v : valueSet)
             updateDstPointsToWithSrcPointsTo(
@@ -173,7 +173,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
 
         V2VSetMap::iterator it = dfval->FuncPtrs.find(dst);
         // if a->{}, do nothing
-        if (it == dfval->FuncPtrs.end()) return;
+        if (it == dfval->FuncPtrs.end()) return false;
 
         // if a->{x}, x->S(b),
         if (it->second.size() == 1) {
@@ -183,7 +183,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         }
         // if a->S(a), a_i->S(a_i) \cup S(b), for a_i \in S(a)
         else {
-            Value* dstPointsTo = mapAllocSite(dst, dfval);
+            // Value* dstPointsTo = mapAllocSite(dst, dfval);
             /*
             ValueSet dstPointsToSet = ValueSet({dstPointsTo});
             for (auto item : dfval->FuncPtrs) {
@@ -191,12 +191,12 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                     item.second = dstPointsToSet;
             }
             */
-            updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
-            /*
+            // updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src);
+
             for (auto dstPointsTo : it->second)
                 updateDstPointsToWithSrcPointsTo(
                         dfval->FuncPtrs, dfval->FuncPtrs, dstPointsTo, src, false);
-            */
+
         }
     }
 
@@ -212,7 +212,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             Value* src = MCI->getArgOperand(1);
             V2VSetMap::iterator it1 = dfval->FuncPtrs.find(dst);
             V2VSetMap::iterator it2 = dfval->FuncPtrs.find(src);
-            if (it1 == dfval->FuncPtrs.end() || it2 == dfval->FuncPtrs.end()) return;
+            if (it1 == dfval->FuncPtrs.end() || it2 == dfval->FuncPtrs.end()) return false;
             ValueSet& valueSet1 = it1->second;
             ValueSet &valueSet2 = it2->second;
             for (auto v1 : valueSet1) {
@@ -222,12 +222,12 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
                     begin = false;
                 }
             }
-            return;
+            return false;
         }
 
         getCallees(dfval->FuncPtrs, CI);
         const FuncSet& callees = CalleeMap[CI];
-        if (callees.empty()) return;
+        if (callees.empty()) return false;
 
         FuncPtrInfo out;
         Function* caller = CI->getParent()->getParent();
@@ -251,7 +251,8 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
 
             if (merge(&(*result)[&F->getEntryBlock()].first, *dfval)) {
                 funcWorkList->insert(F);
-                // funcWorkList->insert(caller);
+                funcWorkList->insert(caller);
+                return true;
             }
             BasicBlock* exitBlock = ExitBlockMap[F];
             merge(&out, (*result)[exitBlock].second);
@@ -270,7 +271,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
         Function* F = RI->getParent()->getParent();
         const CallSet& callers = CallerMap[F];
         Value* src = RI->getReturnValue();
-        if (F->getReturnType()->isVoidTy()) return;
+        if (F->getReturnType()->isVoidTy()) return false;
         for (auto callSite : callers) {
             updateDstPointsToWithSrcPointsTo(
                     // (*result)[&F->getEntryBlock()].first.FuncPtrs,
@@ -321,6 +322,7 @@ void FuncPtrVisitor::compDFVal(Instruction *inst, FuncPtrInfo *dfval,
             updateDstPointsToWithSrcPointsTo(dfval->FuncPtrs, dfval->FuncPtrs, PHI, src, false);
         }
     }
+    return false;
 }
 
 

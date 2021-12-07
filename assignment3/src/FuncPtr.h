@@ -45,7 +45,7 @@ private:
 public:
     FuncPtrVisitor() : allocCount(0), AllocMap(), ExitBlockMap() {}
     bool merge(FuncPtrInfo* dest, const FuncPtrInfo& src) override;
-    void compDFVal(Instruction* inst, FuncPtrInfo* dfval,
+    bool compDFVal(Instruction* inst, FuncPtrInfo* dfval,
                    DataflowVisitor<FuncPtrInfo>* visitor,
                    DataflowResult<FuncPtrInfo>::Type* result,
                    const FuncPtrInfo& initval,

@@ -54,19 +54,20 @@ public:
        return changed;
    }
 
-   void compDFVal(Instruction *inst, LivenessInfo * dfval,
+   bool compDFVal(Instruction *inst, LivenessInfo * dfval,
                   DataflowVisitor<LivenessInfo>* visitor,
                   DataflowResult<LivenessInfo>::Type* result,
                   const LivenessInfo& initval,
                   FuncSet* funcWorkList) override{
-        if (isa<DbgInfoIntrinsic>(inst)) return;
+        if (isa<DbgInfoIntrinsic>(inst)) return false;
         dfval->LiveVars.erase(inst);
         for(User::op_iterator oi = inst->op_begin(), oe = inst->op_end();
             oi != oe; ++oi) {
            Value * val = *oi;
            if (isa<Instruction>(val)) 
                dfval->LiveVars.insert(cast<Instruction>(val));
-       }
+        }
+        return false;
    }
 };
 
